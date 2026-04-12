@@ -1,4 +1,4 @@
-# REVEALD
+# REVEAL'D
 **Regulatory Evaluation of ESG-Aligned Disclosure**
 
 Bremen University of Applied Sciences (HSB) · Faculty Fk1 (Business)

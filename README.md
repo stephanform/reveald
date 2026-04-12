@@ -2,7 +2,7 @@
 **Regulatory Evaluation of ESG-Aligned Disclosure**
 
 Bremen University of Applied Sciences (HSB) · Faculty Fk1 (Business)
-Project Lead: Prof. Dr. Stephan Form · ORCID: 0009-0008-1396-4323
+ · DTX Cluster Project · Project Lead: Prof. Dr. Stephan Form · ORCID: 0009-0008-1396-4323
 
 ---
 

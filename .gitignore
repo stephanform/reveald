@@ -5,8 +5,6 @@
 *.Rproj
 
 # Data (licensed/sensitive – do not commit)
-data/raw/
-data/processed/
 
 # Python
 __pycache__/

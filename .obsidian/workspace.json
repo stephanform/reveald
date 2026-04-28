@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "wps/wp1_research_design/sample_definition.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "sample_definition"
             }
           }
         ]
@@ -185,6 +185,11 @@
   },
   "active": "d319ec2764b6cca1",
   "lastOpenFiles": [
+    "data/raw/~$reveald_sample.xlsm",
+    "wps/wp1_research_design/research_questions.md",
+    "wps/wp1_research_design/sample_definition.md",
+    "README.md",
+    "data/raw/A00F5200",
     "data/raw/CSRD_Transposition_Tracker.xlsx",
     "docs/research_design/research_design_by_consensus.md",
     "docs/research_design/research_design_by_elicit.md",

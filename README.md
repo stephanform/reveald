@@ -18,18 +18,19 @@ enabling causal inference on the effects of regulatory change.
 
 ## Repository Structure
 
-| Folder | Content |
-|---|---|
-| `docs/` | Proposal, research design, meeting minutes, bibliography |
-| `wp1_research_design/` | Research questions, sample definition, variable specification |
-| `wp2_data_acquisition/` | Data sources, governance, coding manual, report corpus index |
-| `wp3_reporting_quality/` | DQS scoring model, intercoder protocol, coding results |
-| `wp4_indicators/` | Sustainability & financial indicators, harmonisation rules |
-| `wp5_descriptive/` | Figures, tables, structural break notes |
-| `wp6_estimation/` | Modelling strategy, R scripts (DiD, event study, robustness) |
-| `wp7_publications/` | Conference materials, journal paper drafts |
-| `data/` | Raw and processed data (see note below) |
-| `reproducibility_package/` | Final replication materials for journal submission |
+| Folder                      | Content                                                       |
+| --------------------------- | ------------------------------------------------------------- |
+| `docs/`                     | Proposal, research design, meeting minutes, bibliography      |
+| `wps/`                      | Working Packages                                              |
+| `wps/wp1_research_design/`  | Research questions, sample definition, variable specification |
+| `wps/wp2_data_acquisition/` | Data sources, governance, coding manual, report corpus index  |
+| `wps/wp3_reporting_quality/`| DQS scoring model, intercoder protocol, coding results        |
+| `wps/wp4_indicators/`       | Sustainability & financial indicators, harmonisation rules    |
+| `wps/wp5_descriptive/`      | Figures, tables, structural break notes                       |
+| `wps/wp6_estimation/`       | Modelling strategy, R scripts (DiD, event study, robustness)  |
+| `wps/wp7_publications/`     | Conference materials, journal paper drafts                    |
+| `data/`                     | Raw and processed data (see note below)                       |
+| `reproducibility_package/`  | Final replication materials for journal submission            |
 
 ---
 

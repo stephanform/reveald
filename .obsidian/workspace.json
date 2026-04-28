@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/research_design/research_design_by_consensus.md",
-                "mode": "source",
-                "source": false
+                "file": "README.md",
+                "mode": "preview",
+                "source": true
               },
               "icon": "lucide-file",
-              "title": "research_design_by_consensus"
+              "title": "README"
             }
           }
         ]
@@ -185,8 +185,8 @@
   },
   "active": "d319ec2764b6cca1",
   "lastOpenFiles": [
-    "docs/research_design/research_design_by_elicit.md",
     "docs/research_design/research_design_by_consensus.md",
+    "docs/research_design/research_design_by_elicit.md",
     "docs/research_design/research_design_by_claude.md",
     "wp1_research_design/research_questions.md",
     "reproducibility_package/codebook.md"

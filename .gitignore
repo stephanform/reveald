@@ -4,8 +4,6 @@
 .Rproj.user/
 *.Rproj
 
-# Data (licensed/sensitive – do not commit)
-
 # Python
 __pycache__/
 *.pyc

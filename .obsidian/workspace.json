@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "wps/wp1_research_design/sample_definition.md",
-                "mode": "preview",
+                "file": "README.md",
+                "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "sample_definition"
+              "title": "README"
             }
           }
         ]
@@ -41,7 +41,7 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": true
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -164,13 +164,25 @@
               "icon": "lucide-list",
               "title": "Outline of research_design_by_claude"
             }
+          },
+          {
+            "id": "b960940bbe4d6b6e",
+            "type": "leaf",
+            "state": {
+              "type": "file-properties",
+              "state": {
+                "file": "README.md"
+              },
+              "icon": "lucide-info",
+              "title": "File properties for README"
+            }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -183,11 +195,20 @@
       "bases:Create new base": false
     }
   },
-  "active": "d319ec2764b6cca1",
+  "active": "f1b42799de46f76b",
   "lastOpenFiles": [
-    "data/raw/~$reveald_sample.xlsm",
+    "docs/management/6958D000",
+    "docs/management/studhk_timetracking.xlsx",
+    "docs/management/E5A7D000",
+    "docs/management/~$studhk_timetracking.xlsx",
+    "docs/management",
+    "docs/mananagement",
+    "docs/Neuer Ordner",
     "wps/wp1_research_design/research_questions.md",
     "wps/wp1_research_design/sample_definition.md",
+    "data/raw/~$reveald_TRESGS_v0.1.xlsm",
+    "wps/wp1_research_design/variable_specification.md",
+    "data/raw/~$reveald_sample.xlsm",
     "README.md",
     "data/raw/A00F5200",
     "data/raw/CSRD_Transposition_Tracker.xlsx",

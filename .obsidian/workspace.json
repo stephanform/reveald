@@ -44,7 +44,7 @@
                 "autoReveal": true
               },
               "icon": "lucide-folder-closed",
-              "title": "Dateiexplorer"
+              "title": "Files"
             }
           },
           {
@@ -174,7 +174,7 @@
                 "file": "docs/management/ttd/2026_05_12_ttd.md"
               },
               "icon": "lucide-info",
-              "title": "Dateieigenschaften von 2026_05_12_ttd"
+              "title": "File properties for 2026_05_12_ttd"
             }
           }
         ],
@@ -186,32 +186,33 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Schnellauswahl öffnen": false,
-      "graph:Graph-Ansicht öffnen": false,
-      "canvas:Neuen Canvas erstellen": false,
-      "daily-notes:Heutige Notiz öffnen": false,
-      "templates:Vorlage einfügen": false,
-      "command-palette:Befehlspalette öffnen": false,
-      "bases:Neue Base erstellen": false
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
     }
   },
-  "active": "d319ec2764b6cca1",
+  "active": "f1b42799de46f76b",
   "lastOpenFiles": [
-    "README.md",
     "docs/management/studhk/~$studhk_timetracking.xlsx",
+    "README.md",
     "docs/management/ttd/2026_05_12_ttd.md",
-    "docs/management/ttd",
-    "docs/management/studhk/studhk_timetracking.xlsx",
-    "docs/management/studhk",
     "data/raw/RequestTable.20260507.xlsm",
     "docs/management/6958D000",
     "docs/management/studhk_timetracking.xlsx",
     "docs/management/E5A7D000",
     "docs/management/~$studhk_timetracking.xlsx",
     "docs/management",
+    "docs/mananagement",
+    "docs/Neuer Ordner",
     "wps/wp1_research_design/research_questions.md",
     "wps/wp1_research_design/sample_definition.md",
+    "data/raw/~$reveald_TRESGS_v0.1.xlsm",
     "wps/wp1_research_design/variable_specification.md",
+    "data/raw/~$reveald_sample.xlsm",
     "docs/research_design/research_design_by_consensus.md",
     "docs/research_design/research_design_by_elicit.md",
     "docs/research_design/research_design_by_claude.md",

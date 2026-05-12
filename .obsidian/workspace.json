@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "docs/management/ttd/2026_05_12_ttd.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "2026_05_12_ttd"
             }
           }
         ]
@@ -171,10 +171,10 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "README.md"
+                "file": "docs/management/ttd/2026_05_12_ttd.md"
               },
               "icon": "lucide-info",
-              "title": "Dateieigenschaften von README"
+              "title": "Dateieigenschaften von 2026_05_12_ttd"
             }
           }
         ],
@@ -195,8 +195,10 @@
       "bases:Neue Base erstellen": false
     }
   },
-  "active": "f1b42799de46f76b",
+  "active": "d319ec2764b6cca1",
   "lastOpenFiles": [
+    "README.md",
+    "docs/management/studhk/~$studhk_timetracking.xlsx",
     "docs/management/ttd/2026_05_12_ttd.md",
     "docs/management/ttd",
     "docs/management/studhk/studhk_timetracking.xlsx",
@@ -207,11 +209,9 @@
     "docs/management/E5A7D000",
     "docs/management/~$studhk_timetracking.xlsx",
     "docs/management",
-    "docs/mananagement",
     "wps/wp1_research_design/research_questions.md",
     "wps/wp1_research_design/sample_definition.md",
     "wps/wp1_research_design/variable_specification.md",
-    "README.md",
     "docs/research_design/research_design_by_consensus.md",
     "docs/research_design/research_design_by_elicit.md",
     "docs/research_design/research_design_by_claude.md",

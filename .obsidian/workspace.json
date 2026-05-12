@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "docs/management/ttd/2026_05_12_ttd.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "2026_05_12_ttd"
             }
           }
         ]
@@ -171,10 +171,10 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "README.md"
+                "file": "docs/management/ttd/2026_05_12_ttd.md"
               },
               "icon": "lucide-info",
-              "title": "File properties for README"
+              "title": "File properties for 2026_05_12_ttd"
             }
           }
         ],
@@ -197,6 +197,8 @@
   },
   "active": "f1b42799de46f76b",
   "lastOpenFiles": [
+    "README.md",
+    "docs/management/ttd/2026_05_12_ttd.md",
     "data/raw/RequestTable.20260507.xlsm",
     "docs/management/6958D000",
     "docs/management/studhk_timetracking.xlsx",
@@ -210,8 +212,6 @@
     "data/raw/~$reveald_TRESGS_v0.1.xlsm",
     "wps/wp1_research_design/variable_specification.md",
     "data/raw/~$reveald_sample.xlsm",
-    "README.md",
-    "data/raw/A00F5200",
     "docs/research_design/research_design_by_consensus.md",
     "docs/research_design/research_design_by_elicit.md",
     "docs/research_design/research_design_by_claude.md",

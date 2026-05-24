@@ -1,0 +1,51 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}       % UTF-8 encoding
+\usepackage[T1]{fontenc}          % proper font encoding
+\usepackage[english]{babel}       % English hyphenation rules
+\usepackage{natbib}               % Harvard-style citations
+\usepackage{hyperref}             % clickable links in PDF (optional)
+
+% ── Document metadata ─────────────────────────────────────────────────────────
+\title{A Minimal Working Example\\with Harvard-Style Citations}
+\author{Your Name}
+\date{\today}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\begin{document}
+
+\maketitle
+
+% ── Introduction ──────────────────────────────────────────────────────────────
+\section{Introduction}
+
+This is a minimal working example demonstrating Harvard-style citations
+using the \texttt{natbib} package in \LaTeX.
+
+% ── Citation examples ─────────────────────────────────────────────────────────
+\section{Citation Examples}
+
+\subsection{Parenthetical citation}
+Estimates of the industry cost of equity are inherently imprecise
+\citep{fama1997industry}.
+
+\subsection{In-text citation}
+\citet{fama1997industry} show that standard errors for cost of equity
+estimates exceed 3\% per year, regardless of whether the CAPM or the
+three-factor model is used.
+
+\subsection{Year only}
+The result was first established in \citeyear{fama1997industry} and has
+since become a standard reference point in corporate finance.
+
+\subsection{Author only}
+\citeauthor{fama1997industry} argue that the imprecision stems from
+both uncertain factor risk premiums and unstable factor loadings.
+
+% ── References ────────────────────────────────────────────────────────────────
+\nocite{*}                         % include ALL entries from the .bib file
+\bibliography{references}          % links to references.bib
+\bibliographystyle{agsm}           % Harvard / AGSM style
+
+\end{document}

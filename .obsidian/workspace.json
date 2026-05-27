@@ -11,12 +11,14 @@
             "id": "d6cc5ef062b2a881",
             "type": "leaf",
             "state": {
-              "type": "pdf",
+              "type": "markdown",
               "state": {
-                "file": "docs/bibliography/reveald.pdf"
+                "file": "docs/management/ttd/2026_05_27_ttd.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-file-text",
-              "title": "reveald"
+              "icon": "lucide-file",
+              "title": "2026_05_27_ttd"
             }
           }
         ]
@@ -183,8 +185,10 @@
   },
   "active": "d6cc5ef062b2a881",
   "lastOpenFiles": [
-    "docs/bibliography/reveald.md",
+    "docs/management/ttd/2026_05_12_ttd.md",
+    "docs/management/ttd/2026_05_27_ttd.md",
     "docs/bibliography/reveald.pdf",
+    "docs/bibliography/reveald.md",
     "docs/bibliography/reveald.bib.XJnQwF"
   ]
 }

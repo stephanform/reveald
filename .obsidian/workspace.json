@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/management/ttd/2026_05_12_ttd.md",
+                "file": "docs/management/ttd/2026_05_27_ttd.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026_05_12_ttd"
+              "title": "2026_05_27_ttd"
             }
           }
         ]
@@ -183,8 +183,10 @@
       "bases:Neue Base erstellen": false
     }
   },
-  "active": "d6cc5ef062b2a881",
+  "active": "d4477b57d7294ba9",
   "lastOpenFiles": [
+    "docs/management/ttd/2026_05_12_ttd.md",
+    "docs/management/ttd/2026_05_27_ttd.md",
     "docs/research_design/theoretical_framework.pdf",
     "docs/research_design/theoretical_framework.md",
     "docs/management/ttd/2026_05_27_ttd",

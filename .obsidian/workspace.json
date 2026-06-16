@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/project_log/decisions/2026-06-09_mail_from_stefan.md",
+                "file": "docs/management/ttd/2026_06_16_ttd.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-06-09_mail_from_stefan"
+              "title": "2026_06_16_ttd"
             }
           }
         ]
@@ -183,19 +183,21 @@
       "bases:Create new base": false
     }
   },
-  "active": "d4477b57d7294ba9",
+  "active": "5a77c759c57addaf",
   "lastOpenFiles": [
+    "docs/management/ttd/2026_05_27_ttd.md",
+    "docs/management/ttd/2026_06_16_ttd.md",
+    "docs/bibliography/reveald.md",
+    "docs/bibliography/reveald.pdf",
+    "docs/management/ttd/2026_05_12_ttd.md",
+    "Untitled.md",
     "docs/project_log/decisions",
     "docs/project_log/minutes",
     "docs/project_log/ideas",
-    "docs/bibliography/reveald.pdf",
     "docs/project_log/decisions/2026-06-09_mail_from_stefan.md",
     "docs/project_log",
     "docs/research_design/Untitled",
     "Untitled",
-    "docs/bibliography/reveald.md",
-    "docs/management/ttd/2026_05_27_ttd.md",
-    "docs/management/ttd/2026_05_12_ttd.md",
     "docs/bibliography/reveald.bib.XJnQwF"
   ]
 }

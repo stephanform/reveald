@@ -4,7 +4,7 @@
 
 ---
 
-- Cui, X., Li, R., Xue, S. and Zhang, X. (2025) 'Mandatory Versus Voluntary: The Real Effect of ESG Disclosures on Corporate Earnings Management', *Journal of International Money and Finance*, 154, pp. 103300. doi: [10.1016/j.jimonfin.2025.103300](https://doi.org/10.1016/j.jimonfin.2025.103300).
+- Cui, X., Li, R., Xue, S. and Zhang, X. (2025) 'Mandatory Versus Voluntary: The Real Effect of ESG Disclosures on Corporate Earnings Management', *Journal of International Money and Finance*, 154, pp. 103323. doi: [10.1016/j.jimonfin.2025.103323](https://doi.org/10.1016/j.jimonfin.2025.103323).
 
 - DiMaggio, P.J. and Powell, W.W. (1983) 'The Iron Cage Revisited: Institutional Isomorphism and Collective Rationality in Organizational Fields', *American Sociological Review*, 48(2), pp. 147–160. doi: [10.2307/2095101](https://doi.org/10.2307/2095101).
 

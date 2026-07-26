@@ -13,12 +13,20 @@
             "state": {
               "type": "markdown",
               "state": {
+<<<<<<< HEAD
                 "file": "wps/wp1_research_design/sample_definition.md",
+=======
+                "file": "docs/research_design/research_design_by_claude.md",
+>>>>>>> 9cf53ed51e3fe59e02a633e21e0d91b55c9e2872
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
+<<<<<<< HEAD
               "title": "sample_definition"
+=======
+              "title": "research_design_by_claude"
+>>>>>>> 9cf53ed51e3fe59e02a633e21e0d91b55c9e2872
             }
           }
         ]
@@ -185,7 +193,10 @@
   },
   "active": "686e08ac0164ab07",
   "lastOpenFiles": [
+<<<<<<< HEAD
     "data/raw/~$RequestTable.20260507.xlsm",
+=======
+>>>>>>> 9cf53ed51e3fe59e02a633e21e0d91b55c9e2872
     "docs/management/ttd/2026_06_16_ttd.md",
     "docs/management/studhk/542B6000",
     "docs/management/studhk/~$studhk_timetracking.xlsx",

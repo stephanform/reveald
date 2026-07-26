@@ -4,12 +4,15 @@ filtered by Navigator using selection criteria:
 - Category: Equities
 - Market: [EU countries]
 - Type: Equity
-- Activity: Active
+- Activity: Active (!)
 - Security: Major
 - Quote: Primary
+- other criteria: no selection
 
 ## Geographical Scope
 - 27 EU Countries
+- European non-EU countries
+- EU accession countries
 
 ## Industry Scope
 - no delimitation

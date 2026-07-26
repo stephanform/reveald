@@ -1,16 +1,13 @@
 # Data Sources
 
-Status: 2026-07-26. Full definitions, methodological classification, and
-limitations are in `docs/research_design/research_design_by_claude.md`
-Section 7. This file indexes the concrete files/locations.
+Status: 2026-07-26. This file indexes the concrete files/locations.
 
 ## Source A — Sustainability / Annual Reports (primary source documents)
 
 - Acquisition pool: ~1,056 EU companies, PDF annual reports + standalone/
   integrated sustainability reports + ESEF/iXBRL packages
-  (`data/raw/primary/`, see `WORKING_NOTES.md`, `FEHLENDE_BERICHTE_MANUELL.md`)
-- Aggregators/registers checked and their coverage limits:
-  `data/sources/SUSTAINABILITY_REPORT_SOURCES.md`
+  (`data/raw/primary/`)
+- Source: srnav.com
 - Classification: primary source document (unmediated, direct from
   disclosing entity); used for qualitative content analysis (Stage 1 Ambition
   Score, DQS panel coding)

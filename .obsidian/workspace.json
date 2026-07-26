@@ -1,32 +1,24 @@
 {
   "main": {
-    "id": "66a93db9da9e69b9",
+    "id": "0c4db9b989c259cb",
     "type": "split",
     "children": [
       {
-        "id": "460a7379b9d43fb9",
+        "id": "e35c97debbb47cbc",
         "type": "tabs",
         "children": [
           {
-            "id": "686e08ac0164ab07",
+            "id": "96eff429d449f28c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-<<<<<<< HEAD
-                "file": "wps/wp1_research_design/sample_definition.md",
-=======
-                "file": "docs/research_design/research_design_by_claude.md",
->>>>>>> 9cf53ed51e3fe59e02a633e21e0d91b55c9e2872
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-<<<<<<< HEAD
-              "title": "sample_definition"
-=======
-              "title": "research_design_by_claude"
->>>>>>> 9cf53ed51e3fe59e02a633e21e0d91b55c9e2872
+              "title": "README"
             }
           }
         ]
@@ -35,15 +27,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "5888d677448f6fdb",
+    "id": "376b828223221541",
     "type": "split",
     "children": [
       {
-        "id": "67e56e33c8fd58f2",
+        "id": "d5729d7d154f7abd",
         "type": "tabs",
         "children": [
           {
-            "id": "2ba6991f42bd1c75",
+            "id": "ce2d3121f9d52408",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -56,7 +48,7 @@
             }
           },
           {
-            "id": "a879802e327cd240",
+            "id": "cc2a4cd4d65fae72",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -69,17 +61,17 @@
                 "sortOrder": "alphabetical"
               },
               "icon": "lucide-search",
-              "title": "Suchen"
+              "title": "Search"
             }
           },
           {
-            "id": "71d4b19f1a888f1d",
+            "id": "e9cd8bc7dcf11088",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
               "state": {},
               "icon": "lucide-bookmark",
-              "title": "Lesezeichen"
+              "title": "Bookmarks"
             }
           }
         ]
@@ -89,20 +81,20 @@
     "width": 300
   },
   "right": {
-    "id": "e141dc48d22b83ba",
+    "id": "3c0819e7cc9f6c84",
     "type": "split",
     "children": [
       {
-        "id": "1febca2b53be15b3",
+        "id": "3cab5d1ecf111391",
         "type": "tabs",
         "children": [
           {
-            "id": "7e174a6289197cd9",
+            "id": "3c34e4ccc7e0150f",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/management/ttd/2026_05_27_ttd.md",
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -112,25 +104,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Rückverweise auf 2026_05_27_ttd"
+              "title": "Backlinks for README"
             }
           },
           {
-            "id": "d62ce43c13bd4347",
+            "id": "2569d048bbd99998",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/management/ttd/2026_05_27_ttd.md",
+                "file": "README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Ausgehende Links von 2026_05_27_ttd öffnen"
+              "title": "Outgoing links from README"
             }
           },
           {
-            "id": "bdd38162c1b4e36b",
+            "id": "6c73227a4879ea81",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -145,7 +137,7 @@
             }
           },
           {
-            "id": "e65ceb17c9663e39",
+            "id": "7d1aafda00c47ba6",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -155,22 +147,22 @@
                 "searchQuery": ""
               },
               "icon": "lucide-archive",
-              "title": "Alle Eigenschaften"
+              "title": "All properties"
             }
           },
           {
-            "id": "50c55897df7e4230",
+            "id": "addd6e324a4b60c5",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/management/ttd/2026_05_27_ttd.md",
+                "file": "README.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Gliederung von 2026_05_27_ttd"
+              "title": "Outline of README"
             }
           }
         ]
@@ -191,26 +183,6 @@
       "bases:Create new base": false
     }
   },
-  "active": "686e08ac0164ab07",
-  "lastOpenFiles": [
-<<<<<<< HEAD
-    "data/raw/~$RequestTable.20260507.xlsm",
-=======
->>>>>>> 9cf53ed51e3fe59e02a633e21e0d91b55c9e2872
-    "docs/management/ttd/2026_06_16_ttd.md",
-    "docs/management/studhk/542B6000",
-    "docs/management/studhk/~$studhk_timetracking.xlsx",
-    "docs/management/studhk/06C90100",
-    "docs/management/ttd/2026_05_27_ttd.md",
-    "docs/research_design/research_design_by_claude.md",
-    "docs/research_design/research_design_by_consensus.md",
-    "docs/research_design/research_design_by_elicit.md",
-    "docs/project_log/2026-06-09_mail_from_stefan.md",
-    "docs/project_log",
-    "Untitled.md",
-    "docs/management/studhk/6BAA6420",
-    "docs/management/studhk/E1810A10",
-    "docs/management/studhk/9E4C2320",
-    "docs/management/ttd/2026_05_12_ttd.md"
-  ]
+  "active": "96eff429d449f28c",
+  "lastOpenFiles": []
 }

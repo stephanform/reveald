@@ -10,11 +10,32 @@ Bremen University of Applied Sciences (HSB) · Faculty Fk1 (Business)
 
 ## Project Description
 REVEALD examines the implementation and effectiveness of corporate
-sustainability reporting regulation in the EU (NFRD → CSRD/ESRS),
-using a quasi-experimental longitudinal panel design. It analyses
-disclosure quality and sustainability indicator development across a
-treatment group (CSRD-compliant reporters) and a control group,
-enabling causal inference on the effects of regulatory change.
+sustainability reporting regulation in the EU (NFRD → CSRD/ESRS). Its
+primary deliverable is a comparative study of climate-target ambition in
+the first mandatory wave of ESRS reports (FY2024): are targets more
+ambitious and credible under legal obligation than under voluntary
+adoption (natural variation from delayed national CSRD transposition,
+incl. Germany)? A second, correlational stage then asks whether capital
+markets price disclosure quality and target ambition differently.
+
+**Methodology:** mixed-methods, staged design —
+(1) qualitative content analysis and structured scoring (Disclosure
+Quality Score, Climate-Target Ambition Score) of primary reports,
+comparing mandatory vs. voluntary ESRS reporters; followed by
+(2) quantitative panel analysis linking those scores to market/risk
+indicators (correlational, not causal — no clean capital-market event
+date exists for CSRD). See `docs/research_design/research_design_by_claude.md`
+for full design and positioning against related work (Donau et al. 2025).
+
+**Data sources:** two distinct sources, kept methodologically separate —
+**Source A**, primary source documents (annual/sustainability reports,
+ESEF filings collected directly from companies and national registers,
+~1,000+ EU companies acquired, FY2024 sub-sample coded for the ambition
+comparison), used for the qualitative component; and **Source B**,
+LSEG Datastream, a secondary/vendor-compiled panel of financial and ESG
+indicators, used for the quantitative component. See
+`wps/wp2_data_acquisition/data_sources.md` and
+`data/sources/SUSTAINABILITY_REPORT_SOURCES.md`.
 
 ---
 
@@ -38,9 +59,10 @@ enabling causal inference on the effects of regulatory change.
 
 ## Data Note
 Raw and processed data files are excluded from version control
-(`.gitignore`) due to licensing restrictions (Refinitiv, Bloomberg,
-etc.). Access instructions are documented in
-`wp2_data_acquisition/data_governance.md`.
+(`.gitignore`): Source B (LSEG Datastream) due to licensing restrictions,
+Source A (company reports) to limit repository size. Access/retrieval
+instructions are documented in `wp2_data_acquisition/data_governance.md`
+and `wp2_data_acquisition/data_sources.md`.
 
 ---
 

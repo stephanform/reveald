@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "wps/wp2_data_acquisition/data_governance.md",
-                "mode": "preview",
+                "file": "wps/wp1_research_design/sample_definition.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "data_governance"
+              "title": "sample_definition"
             }
           }
         ]
@@ -183,10 +183,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "ce2d3121f9d52408",
+  "active": "96eff429d449f28c",
   "lastOpenFiles": [
-    "wps/wp2_data_acquisition/data_sources.md",
     "wps/wp2_data_acquisition/data_governance.md",
+    "wps/wp2_data_acquisition/data_sources.md",
     "README.md"
   ]
 }

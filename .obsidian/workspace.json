@@ -183,8 +183,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "96eff429d449f28c",
+  "active": "ce2d3121f9d52408",
   "lastOpenFiles": [
+    "docs/management/ttd/2026_07_27_ttd.md",
     "wps/wp2_data_acquisition/data_governance.md",
     "wps/wp2_data_acquisition/data_sources.md",
     "README.md"

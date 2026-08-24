@@ -11,14 +11,10 @@
             "id": "96eff429d449f28c",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "wps/wp1_research_design/sample_definition.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "sample_definition"
+              "title": "New tab"
             }
           }
         ]
@@ -41,7 +37,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -164,13 +162,23 @@
               "icon": "lucide-list",
               "title": "Outline of README"
             }
+          },
+          {
+            "id": "050957995aaf67a1",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -180,14 +188,19 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "bases:Create new base": false,
+      "obsidian-git:Open Git source control": false
     }
   },
   "active": "ce2d3121f9d52408",
   "lastOpenFiles": [
+    "web",
+    "README.md",
+    "LICENSE",
+    "Untitled.base",
+    "wps/wp1_research_design/sample_definition.md",
     "docs/management/ttd/2026_07_27_ttd.md",
     "wps/wp2_data_acquisition/data_governance.md",
-    "wps/wp2_data_acquisition/data_sources.md",
-    "README.md"
+    "wps/wp2_data_acquisition/data_sources.md"
   ]
 }

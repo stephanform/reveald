@@ -164,21 +164,11 @@
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of README"
-            }
-          },
-          {
-            "id": "050957995aaf67a1",
-            "type": "leaf",
-            "state": {
-              "type": "git-view",
-              "state": {},
-              "icon": "lucide-ghost",
-              "title": "git-view"
+              "title": "Outline"
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -195,10 +185,12 @@
       "bases:Create new base": false
     }
   },
-  "active": "96eff429d449f28c",
+  "active": "addd6e324a4b60c5",
   "lastOpenFiles": [
-    "web",
     "README.md",
+    "web/index.html",
+    "web/reveald-logo.html",
+    "web",
     "LICENSE",
     "Untitled.base",
     "wps/wp1_research_design/sample_definition.md",

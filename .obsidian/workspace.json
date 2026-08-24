@@ -1,56 +1,41 @@
 {
   "main": {
-    "id": "66a93db9da9e69b9",
+    "id": "0c4db9b989c259cb",
     "type": "split",
     "children": [
       {
-        "id": "460a7379b9d43fb9",
+        "id": "e35c97debbb47cbc",
         "type": "tabs",
         "children": [
           {
-            "id": "686e08ac0164ab07",
+            "id": "96eff429d449f28c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/management/ttd/2026_06_16_ttd.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026_06_16_ttd"
-            }
-          },
-          {
-            "id": "f2305441f33fb9ac",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "docs/management/ttd/2026_07_27_ttd.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2026_07_27_ttd"
+              "title": "README"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
   },
   "left": {
-    "id": "5888d677448f6fdb",
+    "id": "376b828223221541",
     "type": "split",
     "children": [
       {
-        "id": "67e56e33c8fd58f2",
+        "id": "d5729d7d154f7abd",
         "type": "tabs",
         "children": [
           {
-            "id": "2ba6991f42bd1c75",
+            "id": "ce2d3121f9d52408",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -61,11 +46,11 @@
                 "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
-              "title": "Dateiexplorer"
+              "title": "Files"
             }
           },
           {
-            "id": "a879802e327cd240",
+            "id": "cc2a4cd4d65fae72",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -78,17 +63,17 @@
                 "sortOrder": "alphabetical"
               },
               "icon": "lucide-search",
-              "title": "Suchen"
+              "title": "Search"
             }
           },
           {
-            "id": "71d4b19f1a888f1d",
+            "id": "e9cd8bc7dcf11088",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
               "state": {},
               "icon": "lucide-bookmark",
-              "title": "Lesezeichen"
+              "title": "Bookmarks"
             }
           }
         ]
@@ -98,20 +83,20 @@
     "width": 300
   },
   "right": {
-    "id": "e141dc48d22b83ba",
+    "id": "3c0819e7cc9f6c84",
     "type": "split",
     "children": [
       {
-        "id": "1febca2b53be15b3",
+        "id": "3cab5d1ecf111391",
         "type": "tabs",
         "children": [
           {
-            "id": "7e174a6289197cd9",
+            "id": "3c34e4ccc7e0150f",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/management/ttd/2026_05_27_ttd.md",
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -121,25 +106,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Rückverweise auf 2026_05_27_ttd"
+              "title": "Backlinks for README"
             }
           },
           {
-            "id": "d62ce43c13bd4347",
+            "id": "2569d048bbd99998",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/management/ttd/2026_05_27_ttd.md",
+                "file": "README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Ausgehende Links von 2026_05_27_ttd öffnen"
+              "title": "Outgoing links from README"
             }
           },
           {
-            "id": "bdd38162c1b4e36b",
+            "id": "6c73227a4879ea81",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -154,7 +139,7 @@
             }
           },
           {
-            "id": "e65ceb17c9663e39",
+            "id": "7d1aafda00c47ba6",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -164,44 +149,45 @@
                 "searchQuery": ""
               },
               "icon": "lucide-archive",
-              "title": "Alle Eigenschaften"
+              "title": "All properties"
             }
           },
           {
-            "id": "50c55897df7e4230",
+            "id": "addd6e324a4b60c5",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/management/ttd/2026_05_27_ttd.md",
+                "file": "README.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Gliederung von 2026_05_27_ttd"
+              "title": "Outline"
             }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Schnellauswahl öffnen": false,
-      "graph:Graph-Ansicht öffnen": false,
-      "canvas:Neuen Canvas erstellen": false,
-      "daily-notes:Heutige Notiz öffnen": false,
-      "templates:Vorlage einfügen": false,
-      "command-palette:Befehlspalette öffnen": false,
-      "bases:Neue Base erstellen": false
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
     }
   },
-  "active": "f2305441f33fb9ac",
+  "active": "addd6e324a4b60c5",
   "lastOpenFiles": [
+<<<<<<< HEAD
     "docs/management/ttd/2026_06_16_ttd.md",
     "docs/management/ttd/2026_07_27_ttd.md",
     "data/sources/SUSTAINABILITY_REPORT_SOURCES.md",
@@ -222,5 +208,17 @@
     "docs/management/studhk/E1810A10",
     "docs/management/studhk/9E4C2320",
     "docs/management/ttd/2026_05_12_ttd.md"
+=======
+    "README.md",
+    "web/index.html",
+    "web/reveald-logo.html",
+    "web",
+    "LICENSE",
+    "Untitled.base",
+    "wps/wp1_research_design/sample_definition.md",
+    "docs/management/ttd/2026_07_27_ttd.md",
+    "wps/wp2_data_acquisition/data_governance.md",
+    "wps/wp2_data_acquisition/data_sources.md"
+>>>>>>> 7043210856e7cef3d1431a66c4d29a42e0b11fc5
   ]
 }

@@ -47,9 +47,9 @@ panel (RQ2/RQ4).
 Companies listed in LSEG Datastream, status 2026-04-28, filtered by Navigator
 using selection criteria:
 - Category: Equities
-- Market: [EU countries]
+- Market: [EU countries, non EU EEA, accession candidates, microstates]
 - Type: Equity
-- Activity: Active (!)
+- Activity: Active, Dead
 - Security: Major
 - Quote: Primary
 - other criteria: no selection
@@ -58,6 +58,7 @@ using selection criteria:
 - 27 EU Countries
 - European non-EU countries
 - EU accession countries
+- exception, not listed: Liechtenstein, Albania, Moldova, Kosovo, Andorra, San Marino, Vatican City
 
 ### Industry Scope
 - no delimitation at sampling stage; industry fixed effects applied at
@@ -70,3 +71,6 @@ using selection criteria:
 - time frame from 2015 to 2025
 - Intervention 1: NFRD entry into force 2017
 - Intervention 2: CSRD entry into force 2024
+
+### Date retrieved
+- 2026_07_28

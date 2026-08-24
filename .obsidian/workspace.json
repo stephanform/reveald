@@ -56,7 +56,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
               "title": "Dateiexplorer"
@@ -200,13 +202,13 @@
   },
   "active": "f2305441f33fb9ac",
   "lastOpenFiles": [
+    "docs/management/ttd/2026_06_16_ttd.md",
+    "docs/management/ttd/2026_07_27_ttd.md",
     "data/sources/SUSTAINABILITY_REPORT_SOURCES.md",
     "data/sources",
     "docs/management/studhk/DAA3DE10",
     "docs/management/studhk/4093DE10",
     "docs/management/studhk/~$studhk_timetracking.xlsx",
-    "docs/management/ttd/2026_06_16_ttd.md",
-    "docs/management/ttd/2026_07_27_ttd.md",
     "docs/research_design/research_design_by_claude.md",
     "docs/management/studhk/542B6000",
     "docs/management/studhk/06C90100",

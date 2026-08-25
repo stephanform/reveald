@@ -52,9 +52,15 @@
 
   .controls{
     display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:8px;
+    flex:0 0 auto;
+  }
+  .control-row{
+    display:flex;
     align-items:center;
     gap:10px;
-    flex:0 0 auto;
   }
   .controls label{
     font-family:"IBM Plex Mono", monospace;
@@ -64,7 +70,7 @@
     color:var(--ink-muted);
     margin-right:2px;
   }
-  #countryFilter{
+  #countryFilter, #companyFilter{
     background:#0e0e0e;
     border:1px solid rgba(200,200,200,0.28);
     color:var(--ink-primary);
@@ -75,9 +81,9 @@
     width:190px;
     outline:none;
   }
-  #countryFilter::placeholder{ color:#5a5a5a; }
-  #countryFilter:focus{ border-color: var(--focus-ring); }
-  #clearFilter{
+  #countryFilter::placeholder, #companyFilter::placeholder{ color:#5a5a5a; }
+  #countryFilter:focus, #companyFilter:focus{ border-color: var(--focus-ring); }
+  #clearFilter, #clearCompanyFilter{
     background:transparent;
     border:1px solid rgba(200,200,200,0.28);
     color:var(--ink-secondary);
@@ -87,8 +93,46 @@
     border-radius:3px;
     cursor:pointer;
   }
-  #clearFilter:hover{ border-color:var(--focus-ring); color:var(--ink-primary); }
-  #clearFilter:focus-visible, #countryFilter:focus-visible{ outline:2px solid var(--focus-ring); outline-offset:1px; }
+  #clearFilter:hover, #clearCompanyFilter:hover{ border-color:var(--focus-ring); color:var(--ink-primary); }
+  #clearFilter:focus-visible, #countryFilter:focus-visible,
+  #clearCompanyFilter:focus-visible, #companyFilter:focus-visible{ outline:2px solid var(--focus-ring); outline-offset:1px; }
+
+  .suggest-wrap{ position:relative; }
+  .suggest-list{
+    display:none;
+    position:absolute;
+    top:calc(100% + 4px);
+    left:0;
+    right:0;
+    max-height:240px;
+    overflow-y:auto;
+    background:#0e0e0e;
+    border:1px solid rgba(200,200,200,0.28);
+    border-radius:3px;
+    z-index:20;
+    box-shadow:0 8px 24px rgba(0,0,0,0.6);
+  }
+  .suggest-list.open{ display:block; }
+  .suggest-item{
+    padding:6px 10px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11.5px;
+    color:var(--ink-secondary);
+    cursor:pointer;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .suggest-item:hover, .suggest-item.active{
+    background:rgba(255,255,255,0.08);
+    color:var(--ink-primary);
+  }
+  .suggest-empty{
+    padding:6px 10px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11.5px;
+    color:var(--ink-muted);
+  }
 
   main{
     position:relative;
@@ -142,13 +186,23 @@
 <header>
   <div class="title-block">
     <h1>ESG Score Field</h1>
-    <p class="sub">y &mdash; <b>ESG score</b> (0&ndash;100)&nbsp;&nbsp;·&nbsp;&nbsp;x &mdash; <b>fiscal year</b> (FY0 &rarr; FY&minus;3)&nbsp;&nbsp;·&nbsp;&nbsp;z &mdash; <b>country of headquarters</b> (<span id="countryCount"></span> categories)</p>
+    <p class="sub">y &mdash; <b>ESG score</b> (0&ndash;100)&nbsp;&nbsp;·&nbsp;&nbsp;x &mdash; <b>fiscal year</b> (2025 &rarr; 2022)&nbsp;&nbsp;·&nbsp;&nbsp;z &mdash; <b>country of headquarters</b> (<span id="countryCount"></span> categories)</p>
   </div>
   <div class="controls">
-    <label for="countryFilter">Isolate</label>
-    <input id="countryFilter" type="text" list="countryList" placeholder="country&hellip;" autocomplete="off" spellcheck="false" />
-    <datalist id="countryList"></datalist>
-    <button id="clearFilter" type="button">Reset</button>
+    <div class="control-row">
+      <label for="companyFilter">Isolate</label>
+      <div class="suggest-wrap">
+        <input id="companyFilter" type="text" placeholder="company&hellip;" autocomplete="off" spellcheck="false" />
+        <div id="companySuggest" class="suggest-list"></div>
+      </div>
+      <button id="clearCompanyFilter" type="button">Reset</button>
+    </div>
+    <div class="control-row">
+      <label for="countryFilter">Isolate</label>
+      <input id="countryFilter" type="text" list="countryList" placeholder="country&hellip;" autocomplete="off" spellcheck="false" />
+      <datalist id="countryList"></datalist>
+      <button id="clearFilter" type="button">Reset</button>
+    </div>
   </div>
 </header>
 
@@ -173,6 +227,10 @@ const DATA = {"countries":["Austria","Belgium","Bulgaria","Croatia","Cyprus","Cz
   const fyLabels = DATA.fyLabels;
   const records = DATA.records; // [countryIdx, fyIdx, score, companyName]
 
+  // display years in place of the raw FY0/FY-1/... labels
+  const FY_YEAR = { 'FY0': '2025', 'FY-1': '2024', 'FY-2': '2023', 'FY-3': '2022' };
+  const fyDisplay = fyLabels.map(l => FY_YEAR[l] || l);
+
   document.getElementById('countryCount').textContent = countries.length;
   document.getElementById('pointCount').textContent = records.length.toLocaleString('en-US');
   const companySet = new Set(records.map(r => r[3]));
@@ -184,6 +242,11 @@ const DATA = {"countries":["Austria","Belgium","Bulgaria","Croatia","Cyprus","Cz
     opt.value = c;
     dl.appendChild(opt);
   });
+
+  // company name -> country index, for isolating a single company's home line
+  const companyNames = Array.from(companySet).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+  const companyCountryIdx = new Map();
+  records.forEach(r => { if (!companyCountryIdx.has(r[3])) companyCountryIdx.set(r[3], r[0]); });
 
   // ---------- world layout ----------
   const X_SPACING = 150;
@@ -274,6 +337,7 @@ const DATA = {"countries":["Austria","Belgium","Bulgaria","Croatia","Cyprus","Cz
   let hoverPt = null;
   let mouseCSSX = -9999, mouseCSSY = -9999;
   let filterQuery = '';
+  let selectedCompany = null;
 
   canvas.addEventListener('pointerdown', e => {
     dragging = true;
@@ -333,6 +397,7 @@ const DATA = {"countries":["Austria","Belgium","Bulgaria","Croatia","Cyprus","Cz
   const clearBtn = document.getElementById('clearFilter');
   filterInput.addEventListener('input', () => {
     filterQuery = filterInput.value.trim().toLowerCase();
+    if (filterQuery) clearCompanySelection();
     scheduleRender();
   });
   clearBtn.addEventListener('click', () => {
@@ -348,6 +413,93 @@ const DATA = {"countries":["Austria","Belgium","Bulgaria","Croatia","Cyprus","Cz
     countries.forEach((c, i) => { if (c.toLowerCase().includes(filterQuery)) idx.add(i); });
     matchedCountryIdx = idx;
   }
+
+  // ---------- company search / isolate ----------
+  const companyInput = document.getElementById('companyFilter');
+  const companySuggest = document.getElementById('companySuggest');
+  const clearCompanyBtn = document.getElementById('clearCompanyFilter');
+  const MAX_SUGGESTIONS = 8;
+  let activeSuggestIdx = -1;
+  let currentMatches = [];
+
+  function closeSuggestions(){
+    companySuggest.classList.remove('open');
+    companySuggest.innerHTML = '';
+    activeSuggestIdx = -1;
+    currentMatches = [];
+  }
+
+  function renderSuggestions(query){
+    currentMatches = companyNames.filter(n => n.toLowerCase().includes(query)).slice(0, MAX_SUGGESTIONS);
+    activeSuggestIdx = -1;
+    if (!currentMatches.length){
+      companySuggest.innerHTML = '<div class="suggest-empty">no match</div>';
+      companySuggest.classList.add('open');
+      return;
+    }
+    companySuggest.innerHTML = currentMatches.map((n, i) =>
+      `<div class="suggest-item" data-idx="${i}">${escapeHtml(n)}</div>`
+    ).join('');
+    companySuggest.classList.add('open');
+  }
+
+  function selectCompany(name){
+    selectedCompany = name;
+    companyInput.value = name;
+    closeSuggestions();
+    // company isolation and country-text isolation are mutually exclusive
+    filterInput.value = '';
+    filterQuery = '';
+    scheduleRender();
+  }
+
+  function clearCompanySelection(){
+    selectedCompany = null;
+    companyInput.value = '';
+    closeSuggestions();
+    scheduleRender();
+  }
+
+  companyInput.addEventListener('input', () => {
+    const q = companyInput.value.trim().toLowerCase();
+    if (selectedCompany && companyInput.value !== selectedCompany) selectedCompany = null;
+    if (!q){ closeSuggestions(); scheduleRender(); return; }
+    renderSuggestions(q);
+    scheduleRender();
+  });
+
+  companySuggest.addEventListener('mousedown', e => {
+    const item = e.target.closest('.suggest-item');
+    if (!item) return;
+    e.preventDefault();
+    const idx = Number(item.dataset.idx);
+    if (currentMatches[idx]) selectCompany(currentMatches[idx]);
+  });
+
+  companyInput.addEventListener('keydown', e => {
+    if (!companySuggest.classList.contains('open') || !currentMatches.length) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+      e.preventDefault();
+      const dir = e.key === 'ArrowDown' ? 1 : -1;
+      activeSuggestIdx = (activeSuggestIdx + dir + currentMatches.length) % currentMatches.length;
+      companySuggest.querySelectorAll('.suggest-item').forEach((el, i) => {
+        el.classList.toggle('active', i === activeSuggestIdx);
+      });
+    } else if (e.key === 'Enter'){
+      e.preventDefault();
+      const pick = currentMatches[activeSuggestIdx >= 0 ? activeSuggestIdx : 0];
+      if (pick) selectCompany(pick);
+    } else if (e.key === 'Escape'){
+      closeSuggestions();
+    }
+  });
+
+  companyInput.addEventListener('blur', () => {
+    // allow the mousedown handler above to fire before the list disappears
+    setTimeout(closeSuggestions, 120);
+  });
+
+  clearCompanyBtn.addEventListener('click', clearCompanySelection);
 
   // ---------- render ----------
   const tooltip = document.getElementById('tooltip');
@@ -375,15 +527,23 @@ const DATA = {"countries":["Austria","Belgium","Bulgaria","Croatia","Cyprus","Cz
     const focal = cssH * 1.15 * (780/radius) * 0 + cssH * 1.05; // focal tied to viewport, fov roughly fixed
     const FOCAL = cssH * 1.1;
 
+    // company isolation takes priority over the country text filter
+    const companyMode = !!selectedCompany;
+    const companyCi = companyMode ? companyCountryIdx.get(selectedCompany) : null;
+    const anyFiltering = companyMode || !!matchedCountryIdx;
+    function countryIsHighlighted(ci){
+      return companyMode ? ci === companyCi : !!(matchedCountryIdx && matchedCountryIdx.has(ci));
+    }
+
     // ---- floor: per-country category lines (z-axis categories) ----
-    const activeAlphaLo = matchedCountryIdx ? 0.05 : 0.16;
+    const activeAlphaLo = anyFiltering ? 0.05 : 0.16;
     const activeAlphaHi = 1;
     for (let ci = 0; ci < countries.length; ci++){
       const z = worldZ(ci);
       const a3 = project({x:X_MIN, y:0, z}, basis, cssW, cssH, FOCAL);
       const b3 = project({x:X_MAX, y:0, z}, basis, cssW, cssH, FOCAL);
       if (!a3 || !b3) continue;
-      const isMatch = matchedCountryIdx && matchedCountryIdx.has(ci);
+      const isMatch = countryIsHighlighted(ci);
       ctx.strokeStyle = isMatch ? 'rgba(240,240,240,0.85)' : `rgba(190,190,190,${activeAlphaLo})`;
       ctx.lineWidth = isMatch ? 1.4 : 0.6;
       ctx.beginPath();
@@ -444,7 +604,7 @@ const DATA = {"countries":["Austria","Belgium","Bulgaria","Croatia","Cyprus","Cz
       const p3 = project({x:worldX(fi), y:-14, z:Z_MAX+34}, basis, cssW, cssH, FOCAL);
       if (!p3) continue;
       ctx.fillStyle = 'rgba(210,210,210,0.55)';
-      ctx.fillText(fyLabels[fi], p3.sx, p3.sy);
+      ctx.fillText(fyDisplay[fi], p3.sx, p3.sy);
     }
 
     // ---- country (z) labels along left edge ----
@@ -453,11 +613,11 @@ const DATA = {"countries":["Austria","Belgium","Bulgaria","Croatia","Cyprus","Cz
     for (let ci=0; ci<countries.length; ci++){
       const p3 = project({x:X_MIN-14, y:0, z:worldZ(ci)}, basis, cssW, cssH, FOCAL);
       if (!p3) continue;
-      const isMatch = matchedCountryIdx && matchedCountryIdx.has(ci);
+      const isMatch = countryIsHighlighted(ci);
       const scale = Math.max(0.55, Math.min(1, 500/p3.depth));
-      if (!isMatch && scale < 0.62 && matchedCountryIdx) continue;
+      if (!isMatch && scale < 0.62 && anyFiltering) continue;
       ctx.font = (isMatch ? '600 ' : '400 ') + Math.round(10.5*scale) + 'px "IBM Plex Mono", monospace';
-      ctx.fillStyle = isMatch ? 'rgba(245,245,245,0.95)' : `rgba(150,150,150,${0.28*scale + (matchedCountryIdx?0.05:0.25)})`;
+      ctx.fillStyle = isMatch ? 'rgba(245,245,245,0.95)' : `rgba(150,150,150,${0.28*scale + (anyFiltering?0.05:0.25)})`;
       ctx.fillText(countries[ci], p3.sx, p3.sy);
     }
 
@@ -472,17 +632,32 @@ const DATA = {"countries":["Austria","Belgium","Bulgaria","Croatia","Cyprus","Cz
     proj.sort((a,b) => b.depth - a.depth);
     projectedCache = proj;
 
-    const isFiltering = !!matchedCountryIdx;
     for (let i=0;i<proj.length;i++){
       const q = proj[i];
       const sizeAtten = Math.max(0.55, Math.min(2.2, 900/q.depth));
-      const isMatch = !isFiltering || matchedCountryIdx.has(q.rec.countryIdx);
-      const r = (isMatch ? 1.9 : 1.1) * sizeAtten;
-      const alpha = isMatch ? Math.min(0.92, 0.4 + sizeAtten*0.22) : 0.05;
+      const isCompanyMatch = companyMode && q.rec.name === selectedCompany;
+      const isMatch = companyMode ? isCompanyMatch : (!anyFiltering || matchedCountryIdx.has(q.rec.countryIdx));
+      const r = (isCompanyMatch ? 2.6 : (isMatch ? 1.9 : 1.1)) * sizeAtten;
+      const alpha = isCompanyMatch ? Math.min(0.98, 0.6 + sizeAtten*0.22)
+        : isMatch ? Math.min(0.92, 0.4 + sizeAtten*0.22) : 0.05;
       ctx.beginPath();
       ctx.fillStyle = `rgba(${210},${210},${210},${alpha})`;
       ctx.arc(q.sx, q.sy, r, 0, Math.PI*2);
       ctx.fill();
+    }
+
+    // ---- trajectory line through the isolated company's own points ----
+    if (companyMode){
+      const compPts = proj
+        .filter(q => q.rec.name === selectedCompany)
+        .sort((a, b) => a.rec.fyIdx - b.rec.fyIdx);
+      if (compPts.length > 1){
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+        ctx.lineWidth = 1.2;
+        compPts.forEach((q, i) => { if (i === 0) ctx.moveTo(q.sx, q.sy); else ctx.lineTo(q.sx, q.sy); });
+        ctx.stroke();
+      }
     }
 
     // ---- hover ----
@@ -507,7 +682,7 @@ const DATA = {"countries":["Austria","Belgium","Bulgaria","Croatia","Cyprus","Cz
       const rec = hoverPt.rec;
       tooltip.innerHTML =
         `<div class="co">${escapeHtml(rec.name)}</div>` +
-        `<div class="meta">${escapeHtml(countries[rec.countryIdx])} &nbsp;·&nbsp; ${fyLabels[rec.fyIdx]}</div>` +
+        `<div class="meta">${escapeHtml(countries[rec.countryIdx])} &nbsp;·&nbsp; ${fyDisplay[rec.fyIdx]}</div>` +
         `<div>ESG&nbsp;score&nbsp;<span class="score">${rec.score.toFixed(1)}</span></div>`;
       tooltip.style.left = hoverPt.sx + 'px';
       tooltip.style.top = hoverPt.sy + 'px';

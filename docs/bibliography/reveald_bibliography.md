@@ -16,6 +16,8 @@
 
 - Fama, E.F. and French, K.R. (n.d.) *Detail for 48 Industry Portfolios*. Accessed: 2026-05-25. Available at: <https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/det_48_ind_port.html>.
 
+- Institute of Accounting and Auditing, LMU Munich School of Management (2022) _Sustainability Reporting Navigator (SRN)_. Accessed: 2026-07-08. Available at: [https://www.srnav.com](https://www.srnav.com).
+
 - Jensen, M.C. and Meckling, W.H. (1976) 'Theory of the Firm: Managerial Behavior, Agency Costs and Ownership Structure', *Journal of Financial Economics*, 3(4), pp. 305–360. doi: [10.1016/0304-405X(76)90026-X](https://doi.org/10.1016/0304-405X(76)90026-X).
 
 - Krueger, P., Sautner, Z., Tang, D.Y. and Zhong, R. (2024) 'The Effects of Mandatory ESG Disclosure Around the World', *Journal of Accounting Research*, 62(5), pp. 1795–1847. doi: [10.1111/1475-679X.12548](https://doi.org/10.1111/1475-679X.12548).

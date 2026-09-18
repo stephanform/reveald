@@ -14,7 +14,7 @@
   --status-pending:    rgba(150,150,150,0.85);
   --status-na:         rgba(90,90,90,0.6);
   --status-na-line:    rgba(150,150,150,0.55);
-  --magnitude-fill:     rgba(180,180,180,0.55);
+  --magnitude-fill:     rgba(195,195,195,0.75);
 }
 *{box-sizing:border-box;}
 html,body{

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modes &mdash; NFRD / CSRD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dashboard_common.css">
+<style>
+  /* page-specific: per-group mode table (country/industry -> dominant NFRD/CSRD/other dimension) */
+  .mode-table-head, .mode-table-row{ display:grid; grid-template-columns:130px 40px 1fr; gap:12px; align-items:center; }
+  .mode-table-head{
+    font-family:"IBM Plex Mono", monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.08em;
+    color:var(--ink-muted); padding-bottom:8px; border-bottom:1px solid var(--hairline); margin-bottom:6px;
+  }
+  .mode-table-row{ height:28px; }
+  .mode-table-row + .mode-table-row{ margin-top:2px; }
+  .mode-table-row.dim{ opacity:0.28; }
+  .mode-table-row.match .mcell.label{ color:var(--ink-primary); }
+  .mcell{ font-family:"IBM Plex Mono", monospace; font-size:11px; color:var(--ink-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .mcell.label{ color:var(--ink-secondary); }
+  .mcell.total{ color:var(--ink-muted); text-align:right; }
+
+  /* mode chip: category name + a share meter, replacing plain text+percent */
+  .chip{ display:flex; align-items:center; gap:7px; min-width:0; }
+  .chip-name{ flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; color:#f4f4f4; font-weight:600; }
+  .chip-meter{ flex:0 0 44px; height:7px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; }
+  .chip-meter-fill{ height:100%; border-radius:2px; }
+  .chip-meter-fill.magnitude{ background:var(--magnitude-fill); }
+  .chip-pct{ flex:0 0 auto; width:34px; text-align:right; color:var(--ink-muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title-block">
+    <h1>Reveal'd Companies | Modes</h1>
+    <p class="sub">what&rsquo;s typical &mdash; the <b>dominant category</b> per country / industry, and overall&nbsp;&nbsp;&middot;&nbsp;&nbsp;n &mdash; <span id="totalCount"></span> companies</p>
+  </div>
+  <div class="header-right">
+    <nav class="nav-tabs">
+      <a href="dashboard_frequencies.html">Frequencies</a>
+      <a href="dashboard_modes.html" class="active">Modes</a>
+      <a href="dashboard_crosstabs.html">Cross tables</a>
+    </nav>
+    <span class="count" id="slicerCount"></span>
+  </div>
+</header>
+
+<div class="slicer-bar">
+  <div class="slicer-col">
+    <div class="slicer"><label for="countrySlicer">Country</label><select id="countrySlicer"></select></div>
+    <div class="slicer"><label for="industrySlicer">Industry</label><select id="industrySlicer"></select></div>
+  </div>
+  <div class="slicer-col">
+    <div class="slicer"><label for="csrdSlicer">CSRD</label><select id="csrdSlicer"></select></div>
+    <div class="slicer"><label for="nfrdSlicer">NFRD</label><select id="nfrdSlicer"></select></div>
+  </div>
+  <div class="slicer-col">
+    <div class="slicer suggest-wrap">
+      <label for="companySearch">Company</label>
+      <input id="companySearch" type="text" placeholder="point one out&hellip;" autocomplete="off" spellcheck="false" />
+      <div id="companySuggest" class="suggest-list"></div>
+    </div>
+    <button id="resetSlicers" type="button">Reset all</button>
+  </div>
+</div>
+
+<div id="spotlight"></div>
+
+<main>
+
+  <div class="kpi-row">
+    <div class="kpi-tile"><p class="label">Modal country</p><div class="value text" id="kpiCountry">&mdash;</div></div>
+    <div class="kpi-tile"><p class="label">Modal industry</p><div class="value text" id="kpiIndustry">&mdash;</div></div>
+    <div class="kpi-tile"><p class="label">Modal NFRD status</p><div class="value text" id="kpiNfrd">&mdash;</div></div>
+    <div class="kpi-tile"><p class="label">Modal CSRD status</p><div class="value text" id="kpiCsrd">&mdash;</div></div>
+  </div>
+
+  <div class="legend">
+    <span class="lg-title">Reading the tables</span>
+    <span class="legend-item">bold value = the modal (most frequent) category</span>
+    <span class="legend-item">bar + % = its share within that row's group &mdash; a short bar means a weak mode</span>
+  </div>
+
+  <div class="two-col">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Country &mdash; dominant category</h2>
+        <span class="note">low share = no strong mode</span>
+      </div>
+      <div class="panel-body scroll">
+        <div class="mode-table-head">
+          <div>Country</div><div style="text-align:right;">n</div><div>Modal industry</div>
+        </div>
+        <div id="countryModes"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Industry &mdash; dominant category</h2>
+        <span class="note">&ldquo;Almost Nothing&rdquo; is likely a placeholder</span>
+      </div>
+      <div class="panel-body scroll">
+        <div class="mode-table-head">
+          <div>Industry</div><div style="text-align:right;">n</div><div>Modal country</div>
+        </div>
+        <div id="industryModes"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span><b id="footTotal">0</b> companies &nbsp;&middot;&nbsp; <b id="footCountries">0</b> countries &nbsp;&middot;&nbsp; <b id="footIndustries">0</b> industries</span>
+  <span>slicers narrow every table &nbsp;&middot;&nbsp; company search only spotlights, it never hides the rest</span>
+</footer>
+
+<div id="tooltip"></div>
+
+<script src="transposition_data.js"></script>
+<script src="dashboard_common.js"></script>
+<script>
+(function(){
+  const DC = DashboardCommon;
+
+  document.getElementById('totalCount').textContent = DC.COMPANIES.length.toLocaleString();
+  document.getElementById('footTotal').textContent = DC.COMPANIES.length.toLocaleString();
+  document.getElementById('footCountries').textContent = DC.uniqueSorted(DC.COMPANIES, 'c').length;
+  document.getElementById('footIndustries').textContent = DC.uniqueSorted(DC.COMPANIES, 'i').length;
+
+  function modeChip(rows, key){
+    const m = DC.mode(rows, key);
+    if (!m.value) return '<span class="mcell">&mdash;</span>';
+    const share = m.total ? (m.count / m.total * 100) : 0;
+    return '<span class="mcell chip" title="' + m.value + '">' +
+      '<span class="chip-name">' + m.value + '</span>' +
+      '<span class="chip-meter"><span class="chip-meter-fill magnitude" style="width:' + share.toFixed(1) + '%"></span></span>' +
+      '<span class="chip-pct">' + DC.fmtPct(m.count, m.total) + '</span>' +
+      '</span>';
+  }
+
+  function renderGroupTable(containerId, rows, groupKey, otherGroupKey, kind){
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    const groups = {};
+    rows.forEach(r => { const g = r[groupKey]; if (!g) return; (groups[g] = groups[g] || []).push(r); });
+    const entries = Object.entries(groups).sort((a,b) => b[1].length - a[1].length);
+    entries.forEach(([name, groupRows]) => {
+      const row = document.createElement('div');
+      row.className = 'mode-table-row';
+      row.dataset.kind = kind;
+      row.dataset.name = name;
+      row.innerHTML =
+        '<div class="mcell label">' + name + '</div>' +
+        '<div class="mcell total">' + groupRows.length + '</div>' +
+        modeChip(groupRows, otherGroupKey);
+      container.appendChild(row);
+    });
+    container.closest('.panel-body').classList.toggle('empty', entries.length===0);
+  }
+
+  let lastSpotlight = null;
+  function applySpotlight(){
+    document.querySelectorAll('.mode-table-row').forEach(row => {
+      if (!lastSpotlight){ row.classList.remove('dim'); row.classList.remove('match'); return; }
+      const kind = row.dataset.kind, name = row.dataset.name;
+      const val = kind === 'country' ? lastSpotlight.c : lastSpotlight.i;
+      const isMatch = val === name;
+      row.classList.toggle('match', isMatch);
+      row.classList.toggle('dim', !isMatch);
+    });
+  }
+
+  document.addEventListener('filterchange', (evt) => {
+    const rows = evt.detail.rows;
+    const total = rows.length;
+
+    const countryMode = DC.mode(rows, 'c');
+    const industryMode = DC.mode(rows, 'i');
+    const nfrdMode = DC.mode(rows, 'nfrd');
+    const csrdMode = DC.mode(rows, 'csrd');
+
+    document.getElementById('kpiCountry').innerHTML = (countryMode.value || '&mdash;') + '<small>' + DC.fmtPct(countryMode.count, total) + '</small>';
+    document.getElementById('kpiIndustry').innerHTML = (industryMode.value || '&mdash;') + '<small>' + DC.fmtPct(industryMode.count, total) + '</small>';
+    document.getElementById('kpiNfrd').innerHTML = (nfrdMode.value || '&mdash;') + '<small>' + DC.fmtPct(nfrdMode.count, total) + '</small>';
+    document.getElementById('kpiCsrd').innerHTML = (csrdMode.value || '&mdash;') + '<small>' + DC.fmtPct(csrdMode.count, total) + '</small>';
+
+    renderGroupTable('countryModes', rows, 'c', 'i', 'country');
+    renderGroupTable('industryModes', rows, 'i', 'c', 'industry');
+
+    applySpotlight();
+  });
+
+  document.addEventListener('spotlightchange', (evt) => {
+    lastSpotlight = evt.detail.company;
+    applySpotlight();
+  });
+
+  DC.setupSlicers();
+  DC.setupCompanySearch();
+})();
+</script>
+
+</body>
+</html>

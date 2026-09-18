@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cross tables &mdash; NFRD / CSRD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dashboard_common.css">
+</head>
+<body>
+
+<header>
+  <div class="title-block">
+    <h1>Reveal'd Companies | Cross tables</h1>
+    <p class="sub">composition &mdash; <b>industry</b>, split by <b>NFRD / CSRD status</b>&nbsp;&nbsp;&middot;&nbsp;&nbsp;n &mdash; <span id="totalCount"></span> companies</p>
+  </div>
+  <div class="header-right">
+    <nav class="nav-tabs">
+      <a href="dashboard_frequencies.html">Frequencies</a>
+      <a href="dashboard_modes.html">Modes</a>
+      <a href="dashboard_crosstabs.html" class="active">Cross tables</a>
+    </nav>
+    <span class="count" id="slicerCount"></span>
+  </div>
+</header>
+
+<div class="slicer-bar">
+  <div class="slicer-col">
+    <div class="slicer"><label for="countrySlicer">Country</label><select id="countrySlicer"></select></div>
+    <div class="slicer"><label for="industrySlicer">Industry</label><select id="industrySlicer"></select></div>
+  </div>
+  <div class="slicer-col">
+    <div class="slicer"><label for="csrdSlicer">CSRD</label><select id="csrdSlicer"></select></div>
+    <div class="slicer"><label for="nfrdSlicer">NFRD</label><select id="nfrdSlicer"></select></div>
+  </div>
+  <div class="slicer-col">
+    <div class="slicer suggest-wrap">
+      <label for="companySearch">Company</label>
+      <input id="companySearch" type="text" placeholder="point one out&hellip;" autocomplete="off" spellcheck="false" />
+      <div id="companySuggest" class="suggest-list"></div>
+    </div>
+    <button id="resetSlicers" type="button">Reset all</button>
+  </div>
+</div>
+
+<div id="spotlight"></div>
+
+<main>
+
+  <div class="kpi-row">
+    <div class="kpi-tile"><p class="label">Companies in view</p><div class="value" id="kpiTotal">&mdash;</div></div>
+    <div class="kpi-tile"><p class="label">Countries in view</p><div class="value" id="kpiCountries">&mdash;</div></div>
+    <div class="kpi-tile"><p class="label">Industries in view</p><div class="value" id="kpiIndustries">&mdash;</div></div>
+    <div class="kpi-tile"><p class="label">NFRD done, CSRD pending</p><div class="value" id="kpiGap">&mdash;</div></div>
+  </div>
+
+  <div class="legend">
+    <span class="lg-title">Status</span>
+    <span class="legend-item"><span class="swatch transposed"></span>Transposed (mandatory)</span>
+    <span class="legend-item"><span class="swatch pending"></span>Not transposed (not yet mandatory)</span>
+    <span class="legend-item"><span class="swatch na"></span>Not applicable (non&#8209;EU/EEA)</span>
+  </div>
+
+  <div class="two-col">
+    <div class="panel">
+      <div class="panel-head"><h2>Industry &times; CSRD status</h2><span class="note">&ldquo;Almost Nothing&rdquo; is likely a placeholder</span></div>
+      <div class="panel-body scroll" id="industryCsrd"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>Industry &times; NFRD status</h2><span class="note">&ldquo;Almost Nothing&rdquo; is likely a placeholder</span></div>
+      <div class="panel-body scroll" id="industryNfrd"></div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span><b id="footTotal">0</b> companies &nbsp;&middot;&nbsp; <b id="footCountries">0</b> countries &nbsp;&middot;&nbsp; <b id="footIndustries">0</b> industries</span>
+  <span>slicers narrow every chart &nbsp;&middot;&nbsp; company search only spotlights, it never hides the rest</span>
+</footer>
+
+<div id="tooltip"></div>
+
+<script src="transposition_data.js"></script>
+<script src="dashboard_common.js"></script>
+<script>
+(function(){
+  const DC = DashboardCommon;
+  const STATUS = DC.STATUS_ORDER;
+  const CLASS = DC.STATUS_LABEL_CLASS;
+
+  document.getElementById('totalCount').textContent = DC.COMPANIES.length.toLocaleString();
+  document.getElementById('footTotal').textContent = DC.COMPANIES.length.toLocaleString();
+  document.getElementById('footCountries').textContent = DC.uniqueSorted(DC.COMPANIES, 'c').length;
+  document.getElementById('footIndustries').textContent = DC.uniqueSorted(DC.COMPANIES, 'i').length;
+
+  function renderStack(containerId, items){
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    const max = Math.max(...items.map(it => it.total), 1);
+    items.forEach(it => {
+      const row = document.createElement('div');
+      row.className = 'stack-row';
+      row.dataset.name = it.name;
+
+      const track = document.createElement('div');
+      track.className = 'stack-track';
+      track.style.width = (it.total / max * 100).toFixed(1) + '%';
+
+      STATUS.forEach(s => {
+        const c = it.counts[s] || 0;
+        if (!c) return;
+        const seg = document.createElement('div');
+        seg.className = 'seg ' + CLASS[s];
+        seg.style.width = (c / it.total * 100).toFixed(1) + '%';
+        seg.addEventListener('pointerenter', (evt) => {
+          DC.showTip(evt, '<span class="co">' + it.name + '</span><br>' +
+            '<span class="row"><span>' + s + '</span> &nbsp;<b>' + c + '</b> (' + DC.fmtPct(c, it.total) + ')</span><br>' +
+            '<span class="meta">' + it.total + ' companies total</span>');
+        });
+        seg.addEventListener('pointermove', (evt) => DC.showTip(evt, document.getElementById('tooltip').innerHTML));
+        seg.addEventListener('pointerleave', DC.hideTip);
+        track.appendChild(seg);
+      });
+
+      const label = document.createElement('div');
+      label.className = 'stack-label';
+      label.textContent = it.name;
+
+      const total = document.createElement('div');
+      total.className = 'stack-total';
+      total.textContent = it.total;
+
+      row.appendChild(label);
+      row.appendChild(track);
+      row.appendChild(total);
+      container.appendChild(row);
+    });
+    container.classList.toggle('empty', items.length===0);
+  }
+
+  let lastSpotlight = null;
+  function applySpotlight(){
+    document.querySelectorAll('.stack-row').forEach(row => {
+      if (!lastSpotlight){ row.classList.remove('dim'); row.classList.remove('match'); return; }
+      const isMatch = lastSpotlight.i === row.dataset.name;
+      row.classList.toggle('match', isMatch);
+      row.classList.toggle('dim', !isMatch);
+    });
+  }
+
+  document.addEventListener('filterchange', (evt) => {
+    const rows = evt.detail.rows;
+    const total = rows.length;
+
+    document.getElementById('kpiTotal').textContent = total.toLocaleString();
+    document.getElementById('kpiCountries').textContent = DC.uniqueSorted(rows, 'c').length;
+    document.getElementById('kpiIndustries').textContent = DC.uniqueSorted(rows, 'i').length;
+    const gap = rows.filter(r => r.nfrd === 'Transposed' && r.csrd === 'Not transposed').length;
+    document.getElementById('kpiGap').innerHTML = gap.toLocaleString() + '<small>' + DC.fmtPct(gap, total) + '</small>';
+
+    renderStack('industryCsrd', DC.crossTab(rows, 'i', 'csrd'));
+    renderStack('industryNfrd', DC.crossTab(rows, 'i', 'nfrd'));
+
+    applySpotlight();
+  });
+
+  document.addEventListener('spotlightchange', (evt) => {
+    lastSpotlight = evt.detail.company;
+    applySpotlight();
+  });
+
+  DC.setupSlicers();
+  DC.setupCompanySearch();
+})();
+</script>
+
+</body>
+</html>

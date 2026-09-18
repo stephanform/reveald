@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frequencies &mdash; NFRD / CSRD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dashboard_common.css">
+</head>
+<body>
+
+<header>
+  <div class="title-block">
+    <h1>Reveal'd Companies | Frequencies</h1>
+    <p class="sub">how often &mdash; <b>NFRD &amp; CSRD status</b>, <b>country</b>, <b>industry</b>&nbsp;&nbsp;&middot;&nbsp;&nbsp;n &mdash; <span id="totalCount"></span> companies</p>
+  </div>
+  <div class="header-right">
+    <nav class="nav-tabs">
+      <a href="dashboard_frequencies.html" class="active">Frequencies</a>
+      <a href="dashboard_modes.html">Modes</a>
+      <a href="dashboard_crosstabs.html">Cross tables</a>
+    </nav>
+    <span class="count" id="slicerCount"></span>
+  </div>
+</header>
+
+<div class="slicer-bar">
+  <div class="slicer-col">
+    <div class="slicer"><label for="countrySlicer">Country</label><select id="countrySlicer"></select></div>
+    <div class="slicer"><label for="industrySlicer">Industry</label><select id="industrySlicer"></select></div>
+  </div>
+  <div class="slicer-col">
+    <div class="slicer"><label for="csrdSlicer">CSRD</label><select id="csrdSlicer"></select></div>
+    <div class="slicer"><label for="nfrdSlicer">NFRD</label><select id="nfrdSlicer"></select></div>
+  </div>
+  <div class="slicer-col">
+    <div class="slicer suggest-wrap">
+      <label for="companySearch">Company</label>
+      <input id="companySearch" type="text" placeholder="point one out&hellip;" autocomplete="off" spellcheck="false" />
+      <div id="companySuggest" class="suggest-list"></div>
+    </div>
+    <button id="resetSlicers" type="button">Reset all</button>
+  </div>
+</div>
+
+<div id="spotlight"></div>
+
+<main>
+
+  <div class="kpi-row">
+    <div class="kpi-tile"><p class="label">Companies in view</p><div class="value" id="kpiTotal">&mdash;</div></div>
+    <div class="kpi-tile"><p class="label">CSRD transposed</p><div class="value" id="kpiCsrd">&mdash;</div></div>
+    <div class="kpi-tile"><p class="label">NFRD transposed</p><div class="value" id="kpiNfrd">&mdash;</div></div>
+    <div class="kpi-tile"><p class="label">Countries in view</p><div class="value" id="kpiCountries">&mdash;</div></div>
+  </div>
+
+  <div class="legend">
+    <span class="lg-title">Status</span>
+    <span class="legend-item"><span class="swatch transposed"></span>Transposed (mandatory)</span>
+    <span class="legend-item"><span class="swatch pending"></span>Not transposed (not yet mandatory)</span>
+    <span class="legend-item"><span class="swatch na"></span>Not applicable (non&#8209;EU/EEA)</span>
+  </div>
+
+  <div class="two-col">
+    <div class="panel">
+      <div class="panel-head"><h2>CSRD &mdash; frequency</h2><span class="note" id="csrdModeNote"></span></div>
+      <div class="panel-body" id="csrdFreq"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>NFRD &mdash; frequency</h2><span class="note" id="nfrdModeNote"></span></div>
+      <div class="panel-body" id="nfrdFreq"></div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="panel">
+      <div class="panel-head"><h2>Country &mdash; frequency</h2><span class="note">sorted by company count</span></div>
+      <div class="panel-body scroll" id="countryFreq"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>Industry &mdash; frequency</h2><span class="note">&ldquo;Almost Nothing&rdquo; is likely a placeholder</span></div>
+      <div class="panel-body scroll" id="industryFreq"></div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span><b id="footTotal">0</b> companies &nbsp;&middot;&nbsp; <b id="footCountries">0</b> countries &nbsp;&middot;&nbsp; <b id="footIndustries">0</b> industries</span>
+  <span>slicers narrow every chart &nbsp;&middot;&nbsp; company search only spotlights, it never hides the rest</span>
+</footer>
+
+<div id="tooltip"></div>
+
+<script src="transposition_data.js"></script>
+<script src="dashboard_common.js"></script>
+<script>
+(function(){
+  const DC = DashboardCommon;
+  const STATUS = DC.STATUS_ORDER;
+  const CLASS = DC.STATUS_LABEL_CLASS;
+
+  document.getElementById('totalCount').textContent = DC.COMPANIES.length.toLocaleString();
+  document.getElementById('footTotal').textContent = DC.COMPANIES.length.toLocaleString();
+  document.getElementById('footCountries').textContent = DC.uniqueSorted(DC.COMPANIES, 'c').length;
+  document.getElementById('footIndustries').textContent = DC.uniqueSorted(DC.COMPANIES, 'i').length;
+
+  function renderStatusBars(containerId, counts, total, modeNoteId){
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    const entries = STATUS.map(s => ({ status:s, count: counts[s] || 0 })).sort((a,b) => b.count - a.count);
+    const max = Math.max(...entries.map(e => e.count), 1);
+    entries.forEach((e, i) => {
+      const row = document.createElement('div');
+      row.className = 'bar-row';
+      row.dataset.kind = containerId.startsWith('nfrd') ? 'nfrd' : 'csrd';
+      row.dataset.name = e.status;
+      const width = (e.count / max * 100).toFixed(1);
+      row.innerHTML =
+        '<div class="bar-label">' + e.status + '</div>' +
+        '<div class="bar-track"><div class="bar-fill ' + CLASS[e.status] + '" style="width:' + width + '%"></div></div>' +
+        '<div class="bar-value">' + e.count.toLocaleString() + ' <small>' + DC.fmtPct(e.count, total) + '</small></div>';
+      container.appendChild(row);
+      if (i === 0 && modeNoteId) document.getElementById(modeNoteId).textContent = 'mode: ' + e.status;
+    });
+    if (!entries.some(e => e.count>0)) container.classList.add('empty'); else container.classList.remove('empty');
+  }
+
+  function renderMagnitudeBars(containerId, freq, kind){
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    const max = Math.max(...freq.map(e => e.count), 1);
+    freq.forEach(e => {
+      const row = document.createElement('div');
+      row.className = 'bar-row';
+      row.dataset.kind = kind;
+      row.dataset.name = e.name;
+      const width = (e.count / max * 100).toFixed(1);
+      row.innerHTML =
+        '<div class="bar-label">' + e.name + '</div>' +
+        '<div class="bar-track"><div class="bar-fill magnitude" style="width:' + width + '%"></div></div>' +
+        '<div class="bar-value">' + e.count.toLocaleString() + '</div>';
+      container.appendChild(row);
+    });
+    container.classList.toggle('empty', freq.length===0);
+  }
+
+  let lastSpotlight = null;
+
+  function applySpotlight(){
+    document.querySelectorAll('.bar-row').forEach(row => {
+      if (!lastSpotlight){ row.classList.remove('dim'); row.classList.remove('match'); return; }
+      const kind = row.dataset.kind, name = row.dataset.name;
+      const val = kind === 'country' ? lastSpotlight.c : kind === 'industry' ? lastSpotlight.i : kind === 'nfrd' ? lastSpotlight.nfrd : lastSpotlight.csrd;
+      const isMatch = val === name;
+      row.classList.toggle('match', isMatch);
+      row.classList.toggle('dim', !isMatch);
+    });
+  }
+
+  document.addEventListener('filterchange', (evt) => {
+    const rows = evt.detail.rows;
+    const total = rows.length;
+
+    document.getElementById('kpiTotal').textContent = total.toLocaleString();
+    const nfrdT = rows.filter(r => r.nfrd === 'Transposed').length;
+    const csrdT = rows.filter(r => r.csrd === 'Transposed').length;
+    document.getElementById('kpiNfrd').innerHTML = DC.fmtPct(nfrdT, total) + '<small>' + nfrdT + ' co.</small>';
+    document.getElementById('kpiCsrd').innerHTML = DC.fmtPct(csrdT, total) + '<small>' + csrdT + ' co.</small>';
+    document.getElementById('kpiCountries').textContent = DC.uniqueSorted(rows, 'c').length;
+
+    renderStatusBars('nfrdFreq', DC.statusFrequency(rows, 'nfrd'), total, 'nfrdModeNote');
+    renderStatusBars('csrdFreq', DC.statusFrequency(rows, 'csrd'), total, 'csrdModeNote');
+    renderMagnitudeBars('countryFreq', DC.frequency(rows, 'c'), 'country');
+    renderMagnitudeBars('industryFreq', DC.frequency(rows, 'i'), 'industry');
+
+    applySpotlight();
+  });
+
+  document.addEventListener('spotlightchange', (evt) => {
+    lastSpotlight = evt.detail.company;
+    applySpotlight();
+  });
+
+  DC.setupSlicers();
+  DC.setupCompanySearch();
+})();
+</script>
+
+</body>
+</html>

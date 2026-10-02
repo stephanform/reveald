@@ -1,7 +1,5 @@
 # Bibliography
 
-*Generated from `reveald.bib` — Harvard (author-date) style*
-
 ---
 
 - Cui, X., Li, R., Xue, S. and Zhang, X. (2025) 'Mandatory Versus Voluntary: The Real Effect of ESG Disclosures on Corporate Earnings Management', *Journal of International Money and Finance*, 154, pp. 103323. doi: [10.1016/j.jimonfin.2025.103323](https://doi.org/10.1016/j.jimonfin.2025.103323).
@@ -16,7 +14,7 @@
 
 - Fama, E.F. and French, K.R. (n.d.) Detail for 48 Industry Portfolios. Accessed: 2026-05-25. Available at: <https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/det_48_ind_port.html>.
 
-- Fiechter, P., Hitz, J.-M. and Lehmann, N. (2022) 'Real effects of a widespread CSR reporting mandate: Evidence from the European Union's CSR Directive', _Journal of Accounting Research_, 60(4), pp. 1499–1549. doi: 10.1111/1475-679X.12424.
+- Fiechter, P., Hitz, J.-M. and Lehmann, N. (2022) 'Real effects of a widespread CSR reporting mandate: Evidence from the European Union's CSR Directive', _Journal of Accounting Research_, 60(4), pp. 1499–1549. doi: [10.1111/1475-679X.12424]().
 
 - Institute of Accounting and Auditing, LMU Munich School of Management (2022) _Sustainability Reporting Navigator (SRN)_. Accessed: 2026-07-08. Available at: [https://www.srnav.com](https://www.srnav.com).
 

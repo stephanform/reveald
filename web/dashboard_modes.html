@@ -6,33 +6,10 @@
 <title>Modes &mdash; NFRD / CSRD</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="dashboard_common.css?v=5">
-<style>
-  /* page-specific: per-group mode table (country/industry -> dominant NFRD/CSRD/other dimension) */
-  .mode-table-head, .mode-table-row{ display:grid; grid-template-columns:130px 40px 1fr; gap:12px; align-items:center; }
-  .mode-table-head{
-    font-family:"IBM Plex Mono", monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.08em;
-    color:var(--ink-muted); padding-bottom:8px; border-bottom:1px solid var(--hairline); margin-bottom:6px;
-  }
-  .mode-table-row{ height:28px; }
-  .mode-table-row + .mode-table-row{ margin-top:2px; }
-  .mode-table-row.dim{ opacity:0.28; }
-  .mode-table-row.match .mcell.label{ color:var(--ink-primary); }
-  .mcell{ font-family:"IBM Plex Mono", monospace; font-size:11px; color:var(--ink-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .mcell.label{ color:var(--ink-secondary); }
-  .mcell.total{ color:var(--ink-muted); text-align:right; }
-
-  /* mode chip: category name + a share meter, replacing plain text+percent */
-  .chip{ display:flex; align-items:center; gap:7px; min-width:0; }
-  .chip-name{ flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; color:#f4f4f4; font-weight:600; }
-  .chip-meter{ flex:0 0 70px; height:8px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden; }
-  .chip-meter-fill{ display:block; height:100%; border-radius:2px; }
-  .chip-meter-fill.magnitude{ background:var(--magnitude-fill); }
-  .chip-pct{ flex:0 0 auto; width:34px; text-align:right; color:var(--ink-muted); }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dashboard_common.css?v=7">
 </head>
-<body>
+<body class="jar">
 
 <header>
   <div class="title-block">
@@ -41,6 +18,7 @@
   </div>
   <div class="header-right">
     <nav class="nav-tabs">
+      <a href="dashboard_map_beeswarm.html">Europe</a>
       <a href="dashboard_frequencies.html">Frequencies</a>
       <a href="dashboard_modes.html" class="active">Modes</a>
       <a href="dashboard_crosstabs.html">Cross tables</a>
@@ -79,38 +57,28 @@
     <div class="kpi-tile"><p class="label">Modal CSRD status</p><div class="value text" id="kpiCsrd">&mdash;</div></div>
   </div>
 
-  <div class="legend">
-    <span class="lg-title">Reading the tables</span>
-    <span class="legend-item">bold value = the modal (most frequent) category</span>
-    <span class="legend-item">bar + % = its share within that row's group &mdash; a short bar means a weak mode</span>
-  </div>
-
   <div class="two-col">
-    <div class="panel">
-      <div class="panel-head">
-        <h2>Country &mdash; dominant category</h2>
-        <span class="note">low share = no strong mode</span>
+    <section class="panel">
+      <div class="table-head"><span class="j-label">Table 7</span><span class="j-title">Modal Industry by Country</span></div>
+      <div class="panel-body scroll table-scroll">
+        <table class="j-table">
+          <thead><tr><th>Country</th><th class="num"><i>n</i></th><th>Modal industry</th><th class="num">Share</th></tr></thead>
+          <tbody id="countryModes"></tbody>
+        </table>
       </div>
-      <div class="panel-body scroll">
-        <div class="mode-table-head">
-          <div>Country</div><div style="text-align:right;">n</div><div>Modal industry</div>
-        </div>
-        <div id="countryModes"></div>
-      </div>
-    </div>
+      <p class="table-notes">This table reports, for each country, the most frequent Fama&ndash;French 49 industry among the companies in view. <i>n</i> is the number of companies per country. <i>Share</i> is the modal industry&rsquo;s share of <i>n</i>; a low share indicates no dominant industry.</p>
+    </section>
 
-    <div class="panel">
-      <div class="panel-head">
-        <h2>Industry &mdash; dominant category</h2>
-        <span class="note">&ldquo;Almost Nothing&rdquo; is likely a placeholder</span>
+    <section class="panel">
+      <div class="table-head"><span class="j-label">Table 8</span><span class="j-title">Modal Country by Industry</span></div>
+      <div class="panel-body scroll table-scroll">
+        <table class="j-table">
+          <thead><tr><th>Industry</th><th class="num"><i>n</i></th><th>Modal country</th><th class="num">Share</th></tr></thead>
+          <tbody id="industryModes"></tbody>
+        </table>
       </div>
-      <div class="panel-body scroll">
-        <div class="mode-table-head">
-          <div>Industry</div><div style="text-align:right;">n</div><div>Modal country</div>
-        </div>
-        <div id="industryModes"></div>
-      </div>
-    </div>
+      <p class="table-notes">This table reports, for each Fama&ndash;French 49 industry, the most frequent country among the companies in view. <i>n</i> is the number of companies per industry. <i>Share</i> is the modal country&rsquo;s share of <i>n</i>. &ldquo;Almost Nothing&rdquo; is the FF49 residual category.</p>
+    </section>
   </div>
 
 </main>
@@ -122,8 +90,8 @@
 
 <div id="tooltip"></div>
 
-<script src="transposition_data.js?v=5"></script>
-<script src="dashboard_common.js?v=5"></script>
+<script src="transposition_data.js?v=7"></script>
+<script src="dashboard_common.js?v=7"></script>
 <script>
 (function(){
   const DC = DashboardCommon;
@@ -133,16 +101,14 @@
   document.getElementById('footCountries').textContent = DC.uniqueSorted(DC.COMPANIES, 'c').length;
   document.getElementById('footIndustries').textContent = DC.uniqueSorted(DC.COMPANIES, 'i').length;
 
-  function modeChip(rows, key){
+  // modal category + its share of the group, as two table cells (name, meter + %)
+  function modeCells(rows, key){
     const m = DC.mode(rows, key);
-    if (!m.value) return '<span class="mcell">&mdash;</span>';
+    if (!m.value) return '<td>&mdash;</td><td class="num">&mdash;</td>';
     const share = m.total ? (m.count / m.total * 100) : 0;
-    const barWidth = Math.max(share, 6); // visual floor so a real, small share still shows a sliver
-    return '<span class="mcell chip" title="' + m.value + '">' +
-      '<span class="chip-name">' + m.value + '</span>' +
-      '<span class="chip-meter"><span class="chip-meter-fill magnitude" style="width:' + barWidth.toFixed(1) + '%"></span></span>' +
-      '<span class="chip-pct">' + DC.fmtPct(m.count, m.total) + '</span>' +
-      '</span>';
+    const barWidth = Math.max(share, 4); // visual floor so a real, small share still shows a sliver
+    return '<td class="clip" title="' + m.value + '">' + m.value + '</td>' +
+      '<td class="num"><span class="meter"><i style="width:' + barWidth.toFixed(1) + '%"></i></span><span class="pct">' + DC.fmtPct(m.count, m.total) + '</span></td>';
   }
 
   function renderGroupTable(containerId, rows, groupKey, otherGroupKey, kind){
@@ -152,14 +118,13 @@
     rows.forEach(r => { const g = r[groupKey]; if (!g) return; (groups[g] = groups[g] || []).push(r); });
     const entries = Object.entries(groups).sort((a,b) => b[1].length - a[1].length);
     entries.forEach(([name, groupRows]) => {
-      const row = document.createElement('div');
-      row.className = 'mode-table-row';
+      const row = document.createElement('tr');
       row.dataset.kind = kind;
       row.dataset.name = name;
       row.innerHTML =
-        '<div class="mcell label">' + name + '</div>' +
-        '<div class="mcell total">' + groupRows.length + '</div>' +
-        modeChip(groupRows, otherGroupKey);
+        '<td class="clip" title="' + name + '">' + name + '</td>' +
+        '<td class="num">' + groupRows.length + '</td>' +
+        modeCells(groupRows, otherGroupKey);
       container.appendChild(row);
     });
     container.closest('.panel-body').classList.toggle('empty', entries.length===0);
@@ -167,7 +132,7 @@
 
   let lastSpotlight = null;
   function applySpotlight(){
-    document.querySelectorAll('.mode-table-row').forEach(row => {
+    document.querySelectorAll('#countryModes tr, #industryModes tr').forEach(row => {
       if (!lastSpotlight){ row.classList.remove('dim'); row.classList.remove('match'); return; }
       const kind = row.dataset.kind, name = row.dataset.name;
       const val = kind === 'country' ? lastSpotlight.c : lastSpotlight.i;

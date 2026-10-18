@@ -23,8 +23,8 @@
   figcaption { margin-top: 10px; font-size: 11.5px; line-height: 1.45; text-align: center; color: #404040; }
   .tagline { margin: 6px 0 0; text-align: center; font-size: 14px; font-style: italic; letter-spacing: .02em; color: #404040; }
   .invite {
-    margin: 104px 0 12px; text-align: center;
-    font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.45rem); font-weight: 400;
+    margin: 72px 0 52px; text-align: center;
+    font-size: clamp(1.35rem, 1.1rem + 1vw, 1.8rem); font-weight: 400;
     font-variant: small-caps; letter-spacing: .05em;
   }
   .links { list-style: none; counter-reset: sec; margin: 0 auto; padding: 0; max-width: 600px; font-size: 15px; }
@@ -37,6 +37,10 @@
   .links a:focus-visible { outline: 1px dotted #000; outline-offset: 3px; }
   .links .sc { font-variant: small-caps; letter-spacing: .05em; }
   .links .soon { font-style: italic; color: #8c8c8c; white-space: nowrap; }
+  .links .q { color: #404040; }
+  .source a { color: #404040; text-decoration: none; border-bottom: 1px solid #8c8c8c; font-style: normal; font-variant: small-caps; letter-spacing: .05em; }
+  .source a:hover { color: #000; border-bottom-color: #000; }
+  .source { margin: 28px auto 0; max-width: 600px; text-align: center; font-size: 11.5px; font-style: italic; color: #8c8c8c; }
 </style>
 </head>
 <body>
@@ -47,12 +51,13 @@
   <p class="tagline">Regulatory Evaluation of ESG-aligned Disclosure</p>
   <p class="invite">Dive into our findings!</p>
   <ol class="links">
-    <li><a href="dashboard_map_beeswarm.html"><span class="sc">EUROPE</span> &mdash; Companies, sustainability scores</a> <span class="soon">(sample data)</span></li>
-    <li><a href="dashboard_frequencies.html"><span class="sc">NFRD / CSRD</span> &mdash; Frequencies</a></li>
-    <li><a href="dashboard_modes.html"><span class="sc">NFRD / CSRD</span> &mdash; Modes</a></li>
-    <li><a href="dashboard_crosstabs.html"><span class="sc">NFRD / CSRD</span> &mdash; Cross tables</a></li>
+    <li><a href="dashboard_map_beeswarm.html"><span class="sc">ATLAS</span> &ndash; Locations, ESG scores, key figures</a></li>
+    <li><a href="dashboard_frequencies.html"><span class="sc">CENSUS</span> &ndash; NFRD / CSRD frequencies</a></li>
+    <li><a href="dashboard_modes.html"><span class="sc">PROFILES</span> &ndash; ESG rankings &amp; modes</a></li>
+    <li><a href="dashboard_crosstabs.html"><span class="sc">CROSSINGS</span> &ndash; NFRD / CSRD industry &amp; status interaction</a></li>
     <li class="soon">more is soon to come &hellip;</li>
   </ol>
+  <p class="source">Sample: 1,056 European companies from the Sustainability Reporting Navigator (2026), retrieved 26 July 2026 &middot; Data: LSEG Data &amp; Analytics (2026), 2024&ndash;2025 &middot; <a href="references.html">References</a></p>
 </main>
 </body>
 </html>

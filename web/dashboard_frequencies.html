@@ -3,25 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Frequencies &mdash; NFRD / CSRD</title>
+<title>Reveal&rsquo;d &middot; Census</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="dashboard_common.css?v=7">
+<style>
+/* ---------- unit chart (Fig. 3): one square per company ------------------ */
+.unit-tools{ display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 26px; margin:0 0 14px; }
+.unit-tools .ut-label{ font-size:12px; font-variant:small-caps; letter-spacing:.06em; color:var(--j-ink-2); margin-right:4px; }
+.seg-ctl{ display:inline-flex; gap:14px; }
+.seg-ctl button{ font-family:var(--j-font-text); font-size:13px; color:var(--j-ink-2); background:none; border:0; border-bottom:1px solid transparent;
+  padding:0 0 2px; cursor:pointer; }
+.seg-ctl button:hover{ color:var(--j-ink); border-bottom-color:var(--j-ink-3); }
+.seg-ctl button[aria-pressed="true"]{ color:var(--j-ink); border-bottom-color:var(--j-ink); font-style:italic; }
+#unitChart{ position:relative; transition:height .6s ease; }
+.unit{ position:absolute; left:0; top:0; width:9px; height:9px; cursor:pointer;
+  transition:transform .75s cubic-bezier(.45,0,.2,1), background-color .3s ease, opacity .3s ease; }
+.unit.transposed{ background:var(--status-transposed); }
+.unit.pending{ background:var(--status-pending); }
+.unit.na{ background-color:var(--status-na-bg); background-image:repeating-linear-gradient(45deg, #000 0 1px, transparent 1px 3px); box-shadow:inset 0 0 0 1px var(--j-ink); }
+.unit.out{ background:var(--j-paper); background-image:none; box-shadow:inset 0 0 0 1px #cfcfcf; }
+.unit:hover{ outline:1px solid var(--j-ink); outline-offset:1px; z-index:2; }
+.unit.spot{ outline:2px solid var(--j-ink); outline-offset:2px; z-index:3; }
+.ugroup-label, .ugroup-val{ position:absolute; font-family:var(--j-font-figure); font-size:11.5px; line-height:14px; white-space:nowrap;
+  animation:ufade .5s ease both; }
+.ugroup-label{ left:0; text-align:right; color:var(--j-ink-2); overflow:hidden; text-overflow:ellipsis; }
+.ugroup-label.match{ color:var(--j-ink); font-weight:700; }
+.ugroup-val{ color:var(--j-ink); font-variant-numeric:tabular-nums; }
+.ugroup-val small{ font-size:11px; color:var(--j-ink-3); margin-left:4px; }
+.ugroup-axis{ position:absolute; width:0; border-left:1px solid var(--j-ink); animation:ufade .5s ease both; }
+@keyframes ufade{ from{ opacity:0; } to{ opacity:1; } }
+.unit-more{ margin-top:8px; font-family:var(--j-font-text); font-size:12px; font-style:italic; color:var(--j-ink-2); background:none; border:0;
+  border-bottom:1px solid var(--j-ink-3); padding:0 0 1px; cursor:pointer; }
+.unit-more:hover{ color:var(--j-ink); border-bottom-color:var(--j-ink); }
+.swatch.out{ background:var(--j-paper); border-color:#cfcfcf; }
+.fig-wide{ margin-bottom:34px; }
+</style>
 </head>
 <body class="jar">
 
 <header>
   <div class="title-block">
-    <h1>Reveal'd Companies | Frequencies</h1>
-    <p class="sub">how often &mdash; <b>NFRD &amp; CSRD status</b>, <b>country</b>, <b>industry</b>&nbsp;&nbsp;&middot;&nbsp;&nbsp;n &mdash; <span id="totalCount"></span> companies</p>
+    <h1>CENSUS &ndash; NFRD / CSRD frequencies</h1>
+    <p class="sub">how many companies &mdash; by <b>country</b>, <b>industry</b> and <b>NFRD / CSRD status</b>&nbsp;&nbsp;&middot;&nbsp;&nbsp;n &mdash; <span id="totalCount"></span> companies</p>
   </div>
   <div class="header-right">
     <nav class="nav-tabs">
-      <a href="dashboard_map_beeswarm.html">Europe</a>
-      <a href="dashboard_frequencies.html" class="active">Frequencies</a>
-      <a href="dashboard_modes.html">Modes</a>
-      <a href="dashboard_crosstabs.html">Cross tables</a>
+      <a href="dashboard_map_beeswarm.html">Atlas</a>
+      <a href="dashboard_frequencies.html" class="active">Census</a>
+      <a href="dashboard_modes.html">Profiles</a>
+      <a href="dashboard_crosstabs.html">Crossings</a>
+      <a href="index.html">Overview</a>
+      <a href="references.html">References</a>
     </nav>
     <span class="count" id="slicerCount"></span>
   </div>
@@ -58,31 +92,52 @@
   </div>
 
   <div class="legend">
-    <span class="lg-title">Status key (Figs. 3&ndash;4):</span>
+    <span class="lg-title">Status key (Figs. 3&ndash;5):</span>
     <span class="legend-item"><span class="swatch transposed"></span>Transposed (mandatory)</span>
     <span class="legend-item"><span class="swatch pending"></span>Not transposed (not yet mandatory)</span>
     <span class="legend-item"><span class="swatch na"></span>Not applicable (non&#8209;EU/EEA)</span>
+    <span class="legend-item"><span class="swatch out"></span>Outside the slicer selection (Fig. 3)</span>
   </div>
+
+  <figure class="panel fig-wide">
+    <div class="unit-tools">
+      <span><span class="ut-label">Group by</span>
+        <span class="seg-ctl" id="unitGroup" role="group" aria-label="Group companies by">
+          <button type="button" data-v="c" aria-pressed="true">Country</button>
+          <button type="button" data-v="i" aria-pressed="false">Industry</button>
+          <button type="button" data-v="csrd" aria-pressed="false">CSRD status</button>
+          <button type="button" data-v="nfrd" aria-pressed="false">NFRD status</button>
+        </span></span>
+      <span><span class="ut-label">Shade by</span>
+        <span class="seg-ctl" id="unitFill" role="group" aria-label="Shade squares by">
+          <button type="button" data-v="csrd" aria-pressed="true">CSRD</button>
+          <button type="button" data-v="nfrd" aria-pressed="false">NFRD</button>
+        </span></span>
+    </div>
+    <div class="panel-body" id="unitChart" role="img" aria-label="Unit chart: one square per company, grouped and shaded by status"></div>
+    <button type="button" class="unit-more" id="unitMore" hidden></button>
+    <figcaption class="panel-cap"><span class="j-label">Fig. 3.</span>Every company in the sample. One square per company (<i>n</i>&nbsp;=&nbsp;<span id="unitN"></span>), grouped by the dimension chosen above; the length of each row is proportional to the number of companies. Beyond the 12 largest countries or industries, the remaining ones are pooled in one row; &ldquo;Show all&rdquo; lists them individually. Squares are shaded by the <span id="unitFillName">CSRD</span> status of the country of incorporation. Slicers never remove a company: those outside the selection turn hollow and those inside move to the front of their status segment, so every row keeps its full size; the company search outlines one company. Hover a square for details.</figcaption>
+  </figure>
 
   <div class="two-col">
     <figure class="panel">
       <div class="panel-body" id="csrdFreq"></div>
-      <figcaption class="panel-cap"><span class="j-label">Fig. 3.</span>CSRD transposition status. Number of companies (share of companies in view) by the CSRD status of their country of incorporation. <span class="note" id="csrdModeNote"></span></figcaption>
+      <figcaption class="panel-cap"><span class="j-label">Fig. 4.</span>CSRD transposition status. Number of companies (share of companies in view) by the CSRD status of their country of incorporation. <span class="note" id="csrdModeNote"></span></figcaption>
     </figure>
     <figure class="panel">
       <div class="panel-body" id="nfrdFreq"></div>
-      <figcaption class="panel-cap"><span class="j-label">Fig. 4.</span>NFRD transposition status. Number of companies (share of companies in view) by the NFRD status of their country of incorporation. <span class="note" id="nfrdModeNote"></span></figcaption>
+      <figcaption class="panel-cap"><span class="j-label">Fig. 5.</span>NFRD transposition status. Number of companies (share of companies in view) by the NFRD status of their country of incorporation. <span class="note" id="nfrdModeNote"></span></figcaption>
     </figure>
   </div>
 
   <div class="two-col">
     <figure class="panel">
       <div class="panel-body scroll" id="countryFreq"></div>
-      <figcaption class="panel-cap"><span class="j-label">Fig. 5.</span>Companies by country. Countries are sorted by company count.</figcaption>
+      <figcaption class="panel-cap"><span class="j-label">Fig. 6.</span>Companies by country. Countries are sorted by company count.</figcaption>
     </figure>
     <figure class="panel">
       <div class="panel-body scroll" id="industryFreq"></div>
-      <figcaption class="panel-cap"><span class="j-label">Fig. 6.</span>Companies by industry. Industries follow the Fama&ndash;French 49 classification and are sorted by company count. <span class="note">&ldquo;Almost Nothing&rdquo; is the FF49 residual category.</span></figcaption>
+      <figcaption class="panel-cap"><span class="j-label">Fig. 7.</span>Companies by industry. Industries follow the Fama&ndash;French 49 classification and are sorted by company count. <span class="note">&ldquo;Almost Nothing&rdquo; is the FF49 residual category.</span></figcaption>
     </figure>
   </div>
 
@@ -184,6 +239,155 @@
     lastSpotlight = evt.detail.company;
     applySpotlight();
   });
+
+  // ---------- unit chart (Fig. 3) ----------
+  // Squares never leave the chart: slicers only pale them, so rows always show the full sample.
+  // Inside a row squares fill column by column, ordered by status, so the status mix reads like a stacked bar.
+  const Unit = (function(){
+    const ALL = DC.COMPANIES;
+    const PITCH = 10, TOP_N = 12, ROW_GAP = 14;
+    const DIMS = {
+      c:    { plural:'countries' },
+      i:    { plural:'industries' },
+      csrd: { status:true },
+      nfrd: { status:true },
+    };
+    const box = document.getElementById('unitChart');
+    const moreBtn = document.getElementById('unitMore');
+    let groupBy = 'c', fillBy = 'csrd', expanded = false, groups = [];
+    let inView = new Set(ALL), spot = null;
+
+    document.getElementById('unitN').textContent = ALL.length.toLocaleString();
+    const units = ALL.map((c, idx) => {
+      const el = document.createElement('div');
+      el.className = 'unit';
+      el.dataset.idx = idx;
+      box.appendChild(el);
+      return el;
+    });
+    let decor = [];
+
+    function buildGroups(){
+      const map = new Map();
+      if (DIMS[groupBy].status) STATUS.forEach(s => map.set(s, { name:s, items:[] }));
+      ALL.forEach((c, idx) => {
+        const k = c[groupBy] || '–';
+        if (!map.has(k)) map.set(k, { name:k, items:[] });
+        map.get(k).items.push(idx);
+      });
+      let gs = [...map.values()].filter(g => g.items.length);
+      if (DIMS[groupBy].status) return { gs, hidden:0 };
+      gs.sort((a, b) => b.items.length - a.items.length || a.name.localeCompare(b.name));
+      if (expanded || gs.length <= TOP_N + 1) return { gs, hidden:0 };
+      const rest = gs.splice(TOP_N);
+      gs.push({ name:'Other ' + DIMS[groupBy].plural + ' (' + rest.length + ')', items:rest.flatMap(g => g.items), other:true, members:new Set(rest.map(g => g.name)) });
+      return { gs, hidden:rest.length };
+    }
+
+    function layout(){
+      const W = box.clientWidth;
+      const narrow = W < 620;
+      const labelW = narrow ? 104 : 170, valueW = narrow ? 76 : 118;
+      const x0 = labelW + 10;
+      const cols = Math.max(12, Math.floor((W - x0 - valueW) / PITCH));
+      const built = buildGroups();
+      groups = built.gs;
+      const lines = Math.max(1, Math.ceil(Math.max(...groups.map(g => g.items.length)) / cols));
+      const rank = s => STATUS.indexOf(s);
+
+      decor.forEach(el => el.remove());
+      decor = [];
+      let y = 0;
+      groups.forEach((g, gi) => {
+        // status segments first; within a segment, companies in the slicer selection lead
+        g.items.sort((a, b) => rank(ALL[a][fillBy]) - rank(ALL[b][fillBy]) ||
+          (inView.has(ALL[b]) - inView.has(ALL[a])) || ALL[a].n.localeCompare(ALL[b].n));
+        g.cols = Math.ceil(g.items.length / lines);
+        g.items.forEach((idx, k) => {
+          const col = Math.floor(k / lines), row = k % lines;
+          const el = units[idx];
+          el.style.transitionDelay = Math.min(gi * 18 + col * 3, 520) + 'ms';
+          el.style.transform = 'translate(' + (x0 + col * PITCH) + 'px,' + (y + row * PITCH) + 'px)';
+        });
+        const h = lines * PITCH - 1, mid = y + h / 2 - 7;
+        const lab = document.createElement('div');
+        lab.className = 'ugroup-label';
+        lab.style.cssText = 'top:' + mid + 'px;width:' + labelW + 'px;animation-delay:' + Math.min(gi * 18, 400) + 'ms';
+        lab.textContent = g.name;
+        lab.title = g.name;
+        const axis = document.createElement('div');
+        axis.className = 'ugroup-axis';
+        axis.style.cssText = 'left:' + (x0 - 4) + 'px;top:' + (y - 2) + 'px;height:' + (h + 4) + 'px';
+        const val = document.createElement('div');
+        val.className = 'ugroup-val';
+        val.style.cssText = 'top:' + mid + 'px;left:' + (x0 + g.cols * PITCH + 6) + 'px;animation-delay:' + Math.min(gi * 18 + 250, 650) + 'ms';
+        g.labelEl = lab; g.valEl = val;
+        [lab, axis, val].forEach(el => { box.appendChild(el); decor.push(el); });
+        y += lines * PITCH + ROW_GAP;
+      });
+      box.style.height = Math.max(0, y - ROW_GAP) + 'px';
+
+      moreBtn.hidden = DIMS[groupBy].status || (!expanded && !built.hidden);
+      moreBtn.textContent = expanded ? 'Show the ' + TOP_N + ' largest ' + DIMS[groupBy].plural + ' only'
+                                     : 'Show all ' + (TOP_N + built.hidden) + ' ' + DIMS[groupBy].plural;
+      paint();
+    }
+
+    function paint(){
+      const filtered = inView.size !== ALL.length;
+      units.forEach((el, idx) => {
+        const c = ALL[idx];
+        el.className = 'unit ' + CLASS[c[fillBy]] + (inView.has(c) ? '' : ' out') + (spot === c ? ' spot' : '');
+      });
+      groups.forEach(g => {
+        const n = g.items.length, k = g.items.filter(idx => inView.has(ALL[idx])).length;
+        g.valEl.innerHTML = filtered ? k.toLocaleString() + '<small>of ' + n.toLocaleString() + '</small>'
+                                     : n.toLocaleString() + '<small>' + DC.fmtPct(n, ALL.length) + '</small>';
+        const isMatch = spot && (g.other ? g.members.has(spot[groupBy]) : spot[groupBy] === g.name);
+        g.labelEl.classList.toggle('match', !!isMatch);
+      });
+    }
+
+    function wire(ctlId, apply){
+      const ctl = document.getElementById(ctlId);
+      ctl.addEventListener('click', (e) => {
+        const b = e.target.closest('button');
+        if (!b) return;
+        ctl.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        apply(b.dataset.v);
+        layout();
+      });
+    }
+    wire('unitGroup', v => { groupBy = v; expanded = false; });
+    wire('unitFill', v => { fillBy = v; document.getElementById('unitFillName').textContent = v.toUpperCase(); });
+    moreBtn.addEventListener('click', () => { expanded = !expanded; layout(); });
+
+    box.addEventListener('pointerover', (e) => {
+      const el = e.target.closest('.unit');
+      if (!el) return;
+      const c = ALL[+el.dataset.idx];
+      DC.showTip(e, '<span class="co">' + c.n + '</span><br>' +
+        '<span class="meta">' + c.c + ' &middot; ' + c.i + '</span><br>' +
+        '<span class="row"><span>CSRD</span> <b>' + c.csrd + '</b> &nbsp; <span>NFRD</span> <b>' + c.nfrd + '</b></span>' +
+        (inView.has(c) ? '' : '<br><span class="meta">outside the slicer selection</span>'));
+    });
+    box.addEventListener('pointermove', (e) => { if (e.target.closest('.unit')) DC.showTip(e, document.getElementById('tooltip').innerHTML); });
+    box.addEventListener('pointerout', (e) => { if (e.target.closest('.unit')) DC.hideTip(); });
+
+    let resizeTimer = null, lastW = 0;
+    new ResizeObserver(() => {
+      if (box.clientWidth === lastW) return;
+      lastW = box.clientWidth;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(layout, 120);
+    }).observe(box);
+
+    document.addEventListener('filterchange', (evt) => { inView = new Set(evt.detail.rows); layout(); });
+    document.addEventListener('spotlightchange', (evt) => { spot = evt.detail.company; paint(); });
+
+    layout();
+    return { layout };
+  })();
 
   DC.setupSlicers();
   DC.setupCompanySearch();

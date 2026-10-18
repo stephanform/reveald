@@ -3,25 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Modes &mdash; NFRD / CSRD</title>
+<title>Reveal&rsquo;d &middot; Profiles</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="dashboard_common.css?v=7">
+<style>
+/* ---------- forest plot (Fig. 8): median ESG score and IQR per group ---------- */
+.fp-tools{ display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 26px; margin:0 0 8px; }
+.fp-tools .ut-label{ font-size:12px; font-variant:small-caps; letter-spacing:.06em; color:var(--j-ink-2); margin-right:4px; }
+.seg-ctl{ display:inline-flex; gap:14px; }
+.seg-ctl button{ font-family:var(--j-font-text); font-size:13px; color:var(--j-ink-2); background:none; border:0; border-bottom:1px solid transparent;
+  padding:0 0 2px; cursor:pointer; }
+.seg-ctl button:hover{ color:var(--j-ink); border-bottom-color:var(--j-ink-3); }
+.seg-ctl button[aria-pressed="true"]{ color:var(--j-ink); border-bottom-color:var(--j-ink); font-style:italic; }
+#forest svg{ display:block; }
+#forest text{ font-family:var(--j-font-figure); font-size:11.5px; fill:var(--j-ink); }
+#forest text.lab{ fill:var(--j-ink-2); }
+#forest text.rank{ fill:var(--j-ink-3); font-variant-numeric:tabular-nums; }
+#forest text.num{ font-variant-numeric:tabular-nums; }
+#forest text.head{ font-family:var(--j-font-text); font-size:12px; font-variant:small-caps; letter-spacing:.05em; fill:var(--j-ink-2); }
+#forest text.hi{ font-weight:700; fill:var(--j-ink); }
+#forest .few text{ fill:var(--j-ink-3); }
+#forest .grid{ stroke:var(--j-grid); }
+#forest .axis{ stroke:var(--j-ink); shape-rendering:crispEdges; }
+#forest .rule{ stroke:var(--j-ink); shape-rendering:crispEdges; }
+#forest .ref{ stroke:var(--j-ink); stroke-dasharray:4 3; }
+#forest .iqr{ stroke:var(--j-ink); stroke-width:1.4; }
+#forest .few .iqr{ stroke:var(--j-ink-3); }
+#forest .med{ fill:var(--j-ink); }
+#forest .few .med{ fill:var(--j-ink-3); }
+#forest .diamond{ fill:var(--j-ink); }
+#forest .hit{ fill:transparent; cursor:default; }
+#forest .row:hover .hit{ fill:#f4f4f4; }
+#forest .spot{ fill:var(--j-paper); stroke:var(--j-ink); stroke-width:1.6; }
+.fig-wide{ margin-bottom:34px; }
+</style>
 </head>
 <body class="jar">
 
 <header>
   <div class="title-block">
-    <h1>Reveal'd Companies | Modes</h1>
-    <p class="sub">what&rsquo;s typical &mdash; the <b>dominant category</b> per country / industry, and overall&nbsp;&nbsp;&middot;&nbsp;&nbsp;n &mdash; <span id="totalCount"></span> companies</p>
+    <h1>PROFILES &ndash; ESG rankings &amp; modes</h1>
+    <p class="sub">who leads on ESG &mdash; <b>median scores</b> by country, industry and status, and the <b>dominant category</b> per group&nbsp;&nbsp;&middot;&nbsp;&nbsp;n &mdash; <span id="totalCount"></span> companies</p>
   </div>
   <div class="header-right">
     <nav class="nav-tabs">
-      <a href="dashboard_map_beeswarm.html">Europe</a>
-      <a href="dashboard_frequencies.html">Frequencies</a>
-      <a href="dashboard_modes.html" class="active">Modes</a>
-      <a href="dashboard_crosstabs.html">Cross tables</a>
+      <a href="dashboard_map_beeswarm.html">Atlas</a>
+      <a href="dashboard_frequencies.html">Census</a>
+      <a href="dashboard_modes.html" class="active">Profiles</a>
+      <a href="dashboard_crosstabs.html">Crossings</a>
+      <a href="index.html">Overview</a>
+      <a href="references.html">References</a>
     </nav>
     <span class="count" id="slicerCount"></span>
   </div>
@@ -57,9 +90,25 @@
     <div class="kpi-tile"><p class="label">Modal CSRD status</p><div class="value text" id="kpiCsrd">&mdash;</div></div>
   </div>
 
+  <figure class="panel fig-wide">
+    <div class="fp-tools">
+      <span><span class="ut-label">Rank</span>
+        <span class="seg-ctl" id="fpGroup" role="group" aria-label="Rank groups">
+          <button type="button" data-v="c" aria-pressed="true">countries</button>
+          <button type="button" data-v="i" aria-pressed="false">industries</button>
+          <button type="button" data-v="csrd" aria-pressed="false">CSRD status</button>
+          <button type="button" data-v="nfrd" aria-pressed="false">NFRD status</button>
+        </span></span>
+      <span><span class="ut-label">Year</span>
+        <span class="seg-ctl" id="fpYear" role="group" aria-label="Year"></span></span>
+    </div>
+    <div class="panel-body" id="forest" role="img" aria-label="Forest plot of median ESG scores with interquartile ranges, ranked"></div>
+    <figcaption class="panel-cap"><span class="j-label">Fig. 8.</span>ESG scores by <span id="fpGroupName">country</span>, ranked. For each group the square marks the median LSEG ESG score (0&ndash;100) of the companies in view in the selected year, its area proportional to the number of scored companies; the horizontal line spans the interquartile range (25th to 75th percentile). Groups are sorted by median; groups with fewer than five scored companies are shown in gray at the bottom. The dashed line and the diamond give the median and interquartile range of all scored companies in view. All slicers apply; the company search marks the company&rsquo;s score with a hollow circle. <span class="note" id="fpNote"></span></figcaption>
+  </figure>
+
   <div class="two-col">
     <section class="panel">
-      <div class="table-head"><span class="j-label">Table 7</span><span class="j-title">Modal Industry by Country</span></div>
+      <div class="table-head"><span class="j-label">Table 1</span><span class="j-title">Modal Industry by Country</span></div>
       <div class="panel-body scroll table-scroll">
         <table class="j-table">
           <thead><tr><th>Country</th><th class="num"><i>n</i></th><th>Modal industry</th><th class="num">Share</th></tr></thead>
@@ -70,7 +119,7 @@
     </section>
 
     <section class="panel">
-      <div class="table-head"><span class="j-label">Table 8</span><span class="j-title">Modal Country by Industry</span></div>
+      <div class="table-head"><span class="j-label">Table 2</span><span class="j-title">Modal Country by Industry</span></div>
       <div class="panel-body scroll table-scroll">
         <table class="j-table">
           <thead><tr><th>Industry</th><th class="num"><i>n</i></th><th>Modal country</th><th class="num">Share</th></tr></thead>
@@ -85,12 +134,13 @@
 
 <footer>
   <span><b id="footTotal">0</b> companies &nbsp;&middot;&nbsp; <b id="footCountries">0</b> countries &nbsp;&middot;&nbsp; <b id="footIndustries">0</b> industries</span>
-  <span>slicers narrow every table &nbsp;&middot;&nbsp; company search only spotlights, it never hides the rest</span>
+  <span>slicers narrow every chart and table &nbsp;&middot;&nbsp; company search only spotlights, it never hides the rest</span>
 </footer>
 
 <div id="tooltip"></div>
 
 <script src="transposition_data.js?v=7"></script>
+<script src="panel_data.js?v=1"></script>
 <script src="dashboard_common.js?v=7"></script>
 <script>
 (function(){
@@ -166,6 +216,148 @@
     lastSpotlight = evt.detail.company;
     applySpotlight();
   });
+
+  // ---------- forest plot (Fig. 8) ----------
+  // ESG scores come from panel_data.js; both data files list the companies in the same order (master list).
+  (function(){
+    const ALL = DC.COMPANIES;
+    const box = document.getElementById('forest');
+    if (typeof REVEALD_PANEL === 'undefined' || REVEALD_PANEL.companies.length !== ALL.length){
+      box.classList.add('empty');
+      document.getElementById('fpNote').textContent = 'ESG scores not available (panel_data.js missing or out of step with the company list).';
+      return;
+    }
+    const ESG = REVEALD_PANEL.companies.map(c => {
+      const o = {}; Object.entries(c.v).forEach(([y, v]) => { if (v[3] != null) o[y] = v[3]; }); return o; });
+    const idxOf = new Map(ALL.map((c, i) => [c, i]));
+    const YEARS = [...new Set(ESG.flatMap(o => Object.keys(o)))].sort();
+    const MIN_N = 5, SVGNS = 'http://www.w3.org/2000/svg';
+    const NAMES = { c:'country', i:'industry', csrd:'CSRD status', nfrd:'NFRD status' };
+    let groupBy = 'c', year = YEARS[YEARS.length - 1], rows = ALL, spot = null;
+
+    // year buttons
+    const yc = document.getElementById('fpYear');
+    YEARS.forEach(y => { const b = document.createElement('button'); b.type = 'button'; b.dataset.v = y; b.textContent = y;
+      b.setAttribute('aria-pressed', String(y === year)); yc.appendChild(b); });
+
+    const quantile = (s, p) => { if (!s.length) return NaN; const h = (s.length - 1) * p, lo = Math.floor(h);
+      return s[lo] + (s[Math.min(lo + 1, s.length - 1)] - s[lo]) * (h - lo); };
+    function stats(list){
+      const s = list.map(r => r.score).sort((a, b) => a - b);
+      return { n:s.length, med:quantile(s, .5), q1:quantile(s, .25), q3:quantile(s, .75), min:s[0], max:s[s.length - 1],
+        mean:s.reduce((a, b) => a + b, 0) / (s.length || 1) };
+    }
+    const f1 = v => (Math.round(v * 10) / 10).toFixed(1);
+    const el = (tag, attrs, parent) => { const e = document.createElementNS(SVGNS, tag);
+      Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v)); if (parent) parent.appendChild(e); return e; };
+    const txt = (parent, attrs, s) => { const t = el('text', attrs, parent); t.textContent = s; return t; };
+
+    function render(){
+      box.innerHTML = '';
+      const scored = rows.map(r => ({ r, score:ESG[idxOf.get(r)][year] })).filter(d => d.score != null);
+      const unscored = rows.length - scored.length;
+      box.classList.toggle('empty', scored.length === 0);
+      document.getElementById('fpGroupName').textContent = NAMES[groupBy];
+      document.getElementById('fpNote').textContent = scored.length
+        ? scored.length.toLocaleString() + ' of ' + rows.length.toLocaleString() + ' companies in view have an ESG score for ' + year + (unscored ? '; ' + unscored.toLocaleString() + ' without a score are left out.' : '.')
+        : '';
+      if (!scored.length) return;
+
+      const by = new Map();
+      scored.forEach(d => { const k = d.r[groupBy] || '–'; (by.get(k) || by.set(k, []).get(k)).push(d); });
+      const groups = [...by].map(([name, list]) => ({ name, list, ...stats(list) }));
+      const main = groups.filter(g => g.n >= MIN_N).sort((a, b) => b.med - a.med || b.n - a.n);
+      const few = groups.filter(g => g.n < MIN_N).sort((a, b) => b.med - a.med);
+      const all = stats(scored);
+      const maxN = Math.max(...groups.map(g => g.n));
+
+      const W = box.clientWidth || 900, narrow = W < 640;
+      const labelW = narrow ? 120 : 210, tableW = narrow ? 104 : 196, rowH = 19, top = 26;
+      const x0 = labelW + 8, x1 = W - tableW - 14;
+      const X = v => x0 + (x1 - x0) * v / 100;
+      const nRows = main.length + few.length;
+      const yFew = top + main.length * rowH + (few.length ? 22 : 0);
+      const yAll = top + nRows * rowH + (few.length ? 22 : 0) + 14;
+      const H = yAll + rowH + 34;
+      const svg = el('svg', { width:W, height:H, viewBox:'0 0 ' + W + ' ' + H }, box);
+      const cN = x1 + 14, cMed = cN + (narrow ? 34 : 44), cIqr = cMed + (narrow ? 0 : 54);
+
+      // column heads, grid, axis
+      txt(svg, { x:labelW, y:14, 'text-anchor':'end', class:'head' }, NAMES[groupBy].replace(/^./, s => s.toUpperCase()));
+      txt(svg, { x:cN + 22, y:14, 'text-anchor':'end', class:'head' }, 'n');
+      txt(svg, { x:cMed + 30, y:14, 'text-anchor':'end', class:'head' }, 'Median');
+      if (!narrow) txt(svg, { x:cIqr + 6, y:14, class:'head' }, 'IQR');
+      el('line', { x1:labelW - 150 > 0 ? 0 : 0, x2:W, y1:top - 6, y2:top - 6, class:'rule' }, svg);
+      for (let v = 0; v <= 100; v += 20){
+        el('line', { x1:X(v), x2:X(v), y1:top - 2, y2:yAll + rowH, class:'grid' }, svg);
+        txt(svg, { x:X(v), y:yAll + rowH + 16, 'text-anchor':'middle', class:'lab' }, v);
+      }
+      el('line', { x1:x0, x2:x1, y1:yAll + rowH + 2, y2:yAll + rowH + 2, class:'axis' }, svg);
+      txt(svg, { x:(x0 + x1) / 2, y:H - 2, 'text-anchor':'middle', class:'lab' }, 'LSEG ESG score, ' + year);
+      el('line', { x1:X(all.med), x2:X(all.med), y1:top - 2, y2:yAll + rowH / 2, class:'ref' }, svg);
+
+      const spotKey = spot ? spot[groupBy] : null;
+      const spotScore = spot ? ESG[idxOf.get(spot)][year] : null;
+      function drawRow(g, y, rank, isFew){
+        const grp = el('g', { class:'row' + (isFew ? ' few' : '') }, svg);
+        el('rect', { x:0, y:y, width:W, height:rowH, class:'hit' }, grp);
+        const hi = g.name === spotKey;
+        txt(grp, { x:labelW - 26, y:y + 13, 'text-anchor':'end', class:'lab' + (hi ? ' hi' : '') },
+          g.name.length > (narrow ? 16 : 30) ? g.name.slice(0, narrow ? 15 : 29) + '…' : g.name);
+        if (rank) txt(grp, { x:labelW, y:y + 13, 'text-anchor':'end', class:'rank' }, rank + '.');
+        const cy = y + rowH / 2;
+        el('line', { x1:X(g.q1), x2:X(g.q3), y1:cy, y2:cy, class:'iqr' }, grp);
+        const side = Math.max(4, Math.min(13, 3 + 10 * Math.sqrt(g.n / maxN)));
+        el('rect', { x:X(g.med) - side / 2, y:cy - side / 2, width:side, height:side, class:'med' }, grp);
+        if (hi && spotScore != null) el('circle', { cx:X(spotScore), cy, r:4.2, class:'spot' }, grp);
+        txt(grp, { x:cN + 22, y:y + 13, 'text-anchor':'end', class:'num' }, g.n);
+        txt(grp, { x:cMed + 30, y:y + 13, 'text-anchor':'end', class:'num' + (hi ? ' hi' : '') }, f1(g.med));
+        if (!narrow) txt(grp, { x:cIqr + 6, y:y + 13, class:'num lab' }, '[' + f1(g.q1) + ', ' + f1(g.q3) + ']');
+        grp.addEventListener('pointerenter', (e) => DC.showTip(e, tipHtml(g, rank)));
+        grp.addEventListener('pointermove', (e) => DC.showTip(e, tipHtml(g, rank)));
+        grp.addEventListener('pointerleave', DC.hideTip);
+      }
+      main.forEach((g, k) => drawRow(g, top + k * rowH, k + 1, false));
+      if (few.length){
+        const yl = yFew - 8;
+        el('line', { x1:0, x2:W, y1:yl - 6, y2:yl - 6, class:'grid' }, svg);
+        txt(svg, { x:labelW, y:yl + 4, 'text-anchor':'end', class:'rank', 'font-style':'italic' }, 'fewer than ' + MIN_N + ' scored companies');
+        few.forEach((g, k) => drawRow(g, yFew + 4 + k * rowH, null, true));
+      }
+      // overall row: diamond over the IQR, centred on the median
+      el('line', { x1:0, x2:W, y1:yAll - 4, y2:yAll - 4, class:'rule' }, svg);
+      const cy = yAll + rowH / 2;
+      txt(svg, { x:labelW, y:yAll + 13, 'text-anchor':'end', class:'hi' }, 'All companies in view');
+      el('polygon', { points:[[X(all.q1), cy], [X(all.med), cy - 6], [X(all.q3), cy], [X(all.med), cy + 6]].map(p => p.join(',')).join(' '), class:'diamond' }, svg);
+      txt(svg, { x:cN + 22, y:yAll + 13, 'text-anchor':'end', class:'num hi' }, all.n);
+      txt(svg, { x:cMed + 30, y:yAll + 13, 'text-anchor':'end', class:'num hi' }, f1(all.med));
+      if (!narrow) txt(svg, { x:cIqr + 6, y:yAll + 13, class:'num lab' }, '[' + f1(all.q1) + ', ' + f1(all.q3) + ']');
+    }
+
+    function tipHtml(g, rank){
+      const t = { c:'i', i:'c' }[groupBy];
+      let modal = '';
+      if (t){ const m = DC.mode(g.list.map(d => d.r), t);
+        modal = '<br><span class="meta">modal ' + (t === 'i' ? 'industry' : 'country') + ': ' + m.value + ' (' + DC.fmtPct(m.count, m.total) + ')</span>'; }
+      return '<span class="co">' + (rank ? rank + '. ' : '') + g.name + '</span><br>' +
+        '<span class="row"><span>median</span> <b>' + f1(g.med) + '</b> &nbsp;<span>IQR</span> ' + f1(g.q1) + '&ndash;' + f1(g.q3) + '</span><br>' +
+        '<span class="meta">n = ' + g.n + ' &middot; mean ' + f1(g.mean) + ' &middot; range ' + f1(g.min) + '&ndash;' + f1(g.max) + '</span>' + modal +
+        (spot && g.name === spot[groupBy] && ESG[idxOf.get(spot)][year] != null ? '<br><span class="meta">&#9675; ' + spot.n + ': ' + f1(ESG[idxOf.get(spot)][year]) + '</span>' : '');
+    }
+
+    function wire(id, apply){
+      const ctl = document.getElementById(id);
+      ctl.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return;
+        ctl.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); apply(b.dataset.v); render(); });
+    }
+    wire('fpGroup', v => { groupBy = v; });
+    wire('fpYear', v => { year = v; });
+    document.addEventListener('filterchange', (evt) => { rows = evt.detail.rows; render(); });
+    document.addEventListener('spotlightchange', (evt) => { spot = evt.detail.company; render(); });
+    let lastW = 0, t = null;
+    new ResizeObserver(() => { if (box.clientWidth === lastW) return; lastW = box.clientWidth;
+      clearTimeout(t); t = setTimeout(render, 120); }).observe(box);
+  })();
 
   DC.setupSlicers();
   DC.setupCompanySearch();
